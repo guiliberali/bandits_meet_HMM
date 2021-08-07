@@ -17,7 +17,7 @@
   library(nnet) # for which.is.max
   library(expm) ## for matrix power
 
-  server=T
+  server=F
   
  # Context:  "PHONE STORE" or "HULB2009"
   EMPIRICAL_SETTING     <- "PHONE STORE"  
@@ -66,7 +66,7 @@
     PATH_G_MATRIX <- paste(PATH,"input",sep="")
     PATH_OUT      <-  paste(PATH,"results",sep="")
   }  else { 
-    PATH          <-  "~/Documents/Github_HMM/" 
+    PATH          <-  "~/GitHub/Replication_Morphing_HMM" 
     PATH_IN       <-  paste(PATH,"_input",sep="")
     PATH_G_MATRIX <-  "~/Dropbox/LODE/morphing@RSM/analysis/simulation using synthetic data/Alina_sims_updateNov2019/source" 
     PATH_OUT      <-  "~/Dropbox/LODE/morphing@RSM/analysis/simulation using synthetic data/RCT sims April 2021/results" 
@@ -94,8 +94,8 @@
   # Load functions and support code. IMPORTANT: Run Config.R before running this code.
   
   # Loading dock: data and functions   
-  source(paste(PATH, "/Functions.R" , sep="") )   
-  
+  source(paste(PATH, "/Functions.R" , sep="") )  
+
   # Process the parameters already loaded
   STATES      <- 1:TOT_STATES # needed for the draw_state funtion
   
@@ -105,7 +105,7 @@
   INIT_STATES <- TOT_STATES
   
   # Load G table
-  Gmatrix   <- read.table(paste(FILENAME_G, sep="") ) 
+  Gmatrix <- read.table('../Raw Data/Gmatrix.out')
   
   # Load HMM estimated parameters - geometric emission probs (model-based probabilities to bounce)
   geometric_emission_probs <- read.csv(FILENAME_GEOM_EM_PROBS, header=T)

@@ -1,0 +1,7 @@
+choice_code,destination_url,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12
+1,https://xlarge.rsm.nl/phone-shop/#/,1,0,0,0,0,0,1,1,0,0,0,0
+2,https://xlarge.rsm.nl/phone-shop/#/products ,1,0,0,0,0,1,2,0,1,0,0,0
+3,https://xlarge.rsm.nl/phone-shop/#/products/1,0,0,0,0,0,1,3,0,0,0,0,1
+4,https://xlarge.rsm.nl/phone-shop/#/comparison,1,0,0,1,0,0,2,0,0,1,0,0
+5,https://xlarge.rsm.nl/phone-shop/#/trolley,1,1,1,0,0,0,2,0,0,0,1,0
+6,https://xlarge.rsm.nl/phone-shop/#/wtp,0,0,0,0,0,0,4,0,0,0,0,0

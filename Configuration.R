@@ -38,26 +38,19 @@ QS_ARRIVAL_NATURE <- if(TOT_STATES==2) {c(0.98, 0.02)} else {c(.98,.015, 0.005)}
 QS_ARRIVAL        <- if(TOT_STATES==2) {c(1, 0)} else {c(1, 0, 0) } # Alina suggestion: everyone starts in state 1 in the RCT
 QS_ARRIVAL_NATURE <- if(TOT_STATES==2) {c(1, 0)} else {c(1, 0, 0)}  
 
-# Global parameters, rarely change  
+# Global parameters, 
 TOT_VISITORS <- 100000 
 TOT_MORPHS   <- 2  
 K_FULL       <- 14  #  4 in MBA/first two rounds: 4  periods so we allow to change morphs every 4 sets of clicks. Alina suggests (a) using 15 (clicks, RCT median=15, mean=20). (b) decouple clicks from periods. This should be thought thorough
 TOT_PERIODS=K_FULL
 TOT_CONSIDERED_PERIODS<-4
 
-# Paths
-GUI_IS_RUNNING    <- F
-if (GUI_IS_RUNNING)
-{
-  PATH    <- "/Users/gui/SURFDrive/Project HMM_Meets_Morphing/900. sims/_code/Github_HMM sims/"
-  PATH_IN <- paste(PATH,"_input",sep="")
-}  else 
-{ 
-  PATH          <-  "~/Github/Github_HMM/" 
-  PATH_IN       <-  paste(PATH,"_input",sep="")
-  PATH_G_MATRIX <-  "~/Dropbox/LODE/morphing@RSM/analysis/simulation using synthetic data/Alina_sims_updateNov2019/source" 
-  PATH_OUT      <-  paste(PATH,"_results",sep="")
-} 
+
+# paths to use
+PATH          <-  "~/Github/Replication_Morphing_HMM/" 
+PATH_IN       <-  paste(PATH,"_input",sep="")
+PATH_OUT      <-  paste(PATH,"_results",sep="")
+
 
 
 
@@ -76,14 +69,6 @@ FILENAME_BOUNCE_PROBS  <- paste(PATH_IN, "/", HMM_MODEL,file= "/pmf_bounce_geome
 FILENAME_G             <- paste("_input/Gmatrix.out", sep="") 
 FILENAME_GEOM_EM_PROBS  <- paste(PATH_IN, "/", HMM_MODEL,file= "/geometric_emission_probs_RCT_April2021.csv", sep="")
 
-#   This file is old and not needed.
-#      Hence I commented out here, and removed it from Github
-#      FILENAME_CKJN    <- paste(PATH_IN, "/", HMM_MODEL, "/cij_multinom_restrict.csv", sep="")  
-
-#   These two files have  all conditions and states, including conditions 2,3 hence I am assuming the are old and cannot be used.
-#      Hence I removed them from github and commented out here.
-#      FILENAME_PSM           <- paste(PATH_IN, "/", HMM_MODEL,file= "/G_psm_geometricHMM.csv", sep="") 
-#      FILENAME_OOMEGA  <- paste(PATH_IN, "/", HMM_MODEL, "/omega_multinom_click_2SNT.csv" , sep="")  
 
 
 

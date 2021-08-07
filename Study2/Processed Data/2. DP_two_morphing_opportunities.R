@@ -7,10 +7,9 @@
 # I.   Loaded parameters (some were initialized in the Config files) ####
 
 # Load functions and support code. IMPORTANT: Run Config.R before running this code.
-source(paste (PATH, "Functions.R" , sep="") )   
+source(paste (PATH, "/Functions.R" , sep="") )
 
-PATH
-getwd()
+
 # Process the parameters already loaded
 STATES      <- 1:TOT_STATES # needed for the draw_state funtion
  
@@ -20,15 +19,8 @@ if (TOT_STATES==1) {all_s <- matrix(1,ncol=TOT_MORPHS)}; if (TOT_STATES==2) {all
 INIT_STATES <- TOT_STATES
 
 # Load G table
-setwd(PATH_IN);setwd("../..") # Gmatrix.out should not be in the github folder due to size
-if (!GUI_IS_RUNNING) {setwd(PATH_G_MATRIX)}
-Gmatrix <- read.table(FILENAME_G)  
+Gmatrix <- read.table('../Raw Data/Gmatrix.out')
 
-
-
-# Load Ckjn with website structure
-# This is not needed here. I commented it out.
-# Ckjn <- read.csv(FILENAME_CKJN, header=T)  
 
 # Load HMM estimated parameters - Omega, to learn states from clicks
 # OOMEGA  <- read.csv( FILENAME_OOMEGA,  header=T) 
@@ -47,7 +39,7 @@ if (TRANSITION_COVARIATES) rho_vec <- read.csv( FILENAME_RHO , header=T)
 
 # Load purchase probability 
 temp_psm <- read.csv(FILENAME_PSM_per_state , header=T)  
-  
+
 # II.  Curate HMM Parameters: rho, mu, XA, Q0, Q0_K, psm   ####
 if (TOT_STATES > 1 )
     { 
@@ -128,9 +120,9 @@ if (BENCHMARK == "test2") {   }
 N        <- matrix(0, ncol=TOT_VISITORS)
 last_click  <- rep(0, TOT_VISITORS) #matrix(K_FULL, ncol=TOT_VISITORS)
 I        <- matrix(, ncol=TOT_MORPHS)
-delta_sm <- matrix(0, nrow = TOT_STATES, ncol=TOT_MORPHS); colnames (delta_sm) <- colnames(delta_sm) <- c("abstract", "concrete"); 
-rownames (delta_sm )<- rownames (delta_sm )<- if(TOT_STATES==2) {c("early", "late") } ; 
-rownames (delta_sm )<- rownames (delta_sm ) <- if(TOT_STATES==3)    {c("early", "mid","late") } 
+delta_sm_pre<- delta_sm_post <- matrix(0, nrow = TOT_STATES, ncol=TOT_MORPHS); colnames (delta_sm_pre ) <- colnames(delta_sm_post) <- c("abstract", "concrete"); 
+rownames (delta_sm_pre )<- rownames (delta_sm_post )<- if(TOT_STATES==2) {c("early", "late") } ; 
+rownames (delta_sm_pre )<- rownames (delta_sm_post ) <- if(TOT_STATES==3)    {c("early", "mid","late") } 
 I_evolution       <- matrix(0,nrow=TOT_VISITORS, ncol=TOT_MORPHS)
 morph_chosen      <- matrix(0,nrow=TOT_VISITORS, ncol=K_FULL+1)  
 posterior         <- matrix( , nrow=TOT_VISITORS, ncol=K_FULL)  
@@ -140,15 +132,15 @@ qs_HMM_nature_everyone_error   <- matrix(0, nrow=TOT_VISITORS, ncol=K_FULL)
 error_state       <- matrix(0, nrow=TOT_VISITORS, ncol= 9); colnames(error_state)<- c("visitor", "qr_t1","qr_t2","qr_t3","qr_t4","qs_t1","qs_t2","qs_t3","qs_t4")
 alphabeta         <- array(rep(1, TOT_STATES*TOT_MORPHS*2), dim=c(TOT_STATES, TOT_MORPHS, 2))
 success_per_visitor <- rep(0, TOT_VISITORS)
-success_prob_runAverage <- rep(0, TOT_VISITORS)
+success_prob_runAverage_pre <-success_prob_runAverage_post <- rep(0, TOT_VISITORS)
 
 ## We are not using PRE at all, we are just using POST and consider that only the morph seen from click 7 to 14 matters. 
 alpha_PRE         <- alpha_POST<- matrix(alphabeta[,,1], ncol=TOT_MORPHS) ; beta_PRE<- beta_POST <- matrix(alphabeta[,,2], ncol=TOT_MORPHS)
 G_current_sm_PRE  <- G_current_sm_POST   <- matrix(0,  nrow=TOT_STATES, ncol=TOT_MORPHS) 
 G_asym_m1_PRE     <- G_asym_m1_POST     <- G_asym_m2_PRE <- G_asym_m2_POST    <-  matrix(0, nrow=TOT_VISITORS, ncol=TOT_STATES)  # current value of the  index
 monitor_G_m1_s_PRE<- monitor_G_m2_s_PRE <- monitor_G_m1_s_POST<- monitor_G_m2_s_POST <- matrix(0, nrow=TOT_VISITORS, ncol=TOT_STATES)
-
-
+MODEL
+set.seed(9000)
 # V.  Loop over all visitors: initializations, then Nature draws state, we update state estimates, get best morph from DP w/G matrix ####
 for (visitor  in 1:TOT_VISITORS)
     {
@@ -179,7 +171,8 @@ for (visitor  in 1:TOT_VISITORS)
       if (MODEL == HMM_BANDIT) {
         lambda   <- Transition_Matrix(XA, rho, mu, Q0_K, DIM_NON_TERMINAL_STATES, TERMINAL) 
         qs_HMM_sys_future <- estimate_future_period_qs_general(lambda)
-        best_morph_uncond <- DP(1, qs_HMM_sys_future, qs_HMM[1,], G_current_sm_POST, G_current_sm_PRE,p_bounce_click )  
+        best_morph_uncond <- DP(1, qs_HMM_sys_future, qs_HMM[1,], G_current_sm_POST, G_current_sm_PRE, p_bounce_click )  # , delta_dp= delta_dp[period+1]) }
+
         best_morph <- best_morph_uncond[1]
         } # , delta_dp= delta_dp[period+1]) }
       
@@ -190,7 +183,7 @@ for (visitor  in 1:TOT_VISITORS)
       for (click in 1:K_FULL)     
         { 
         # for testing
-        # click=2 
+        # click=8
           # Draw true state:  S(t)= f(qs_HMM(t) )  but this does not take into account effects of morph exposure ####
           if (BENCHMARK == "test1") {true_state[click] <- Draw_state(STATES, qs_HMM_nature[click, ]) }
           if (BENCHMARK == "test2") {true_state[click] <- Draw_state(STATES, qs_HMM_nature[click, ]) }
@@ -252,7 +245,7 @@ for (visitor  in 1:TOT_VISITORS)
                         }        
                       
                        # F.2. Solve DP using HMM's m*(t=1) = Argmax DP(qs_HMM(t+1), qs_future(t+1) )  ####
-                       if (MODEL == HMM_BANDIT) {best_morph_uncond <- DP(click, qs_HMM_sys_future, qs_HMM[click,], G_current_sm_POST, G_current_sm_PRE, p_bounce_click )  }  # , delta_dp= delta_dp[period+1]) }
+                       if (MODEL == HMM_BANDIT) {best_morph_uncond <- DP(click, qs_HMM_sys_future, qs_HMM[click,], G_current_sm_POST, G_current_sm_PRE, p_bounce_click ) } # , delta_dp= delta_dp[period+1]) }
                        if  (MODEL == HMM_BANDIT_4P) {best_morph_uncond<- DP_4periods(click, qs_HMM_sys_future, qs_HMM[click,], G_current_sm_POST, p_bounce_click ) } # , delta_dp= delta_dp[period+1]) }
                        if  (MODEL == HMM_BANDIT_STORE) {best_morph_uncond <- DP_webstore_implementation(G_current_sm_POST) }  # , delta_dp= delta_dp[period+1]) }
                    
@@ -263,8 +256,7 @@ for (visitor  in 1:TOT_VISITORS)
                        if (MODEL == HMM_MAB_NO_DP)    { best_morph <- which.is.max(I[]) }     
                        if (MODEL == HULB)             { best_morph <- which.is.max(I[]) }   
                        if (MODEL == RANDOM)           { best_morph <- which(rmultinom(1,1,matrix(c(1/TOT_MORPHS),ncol=TOT_MORPHS) ) == 1) }   
-                  
-                    } # if time to morph 
+                   } # if time to morph 
                   
                   } #  close if TOT_STATES >1
               
@@ -284,9 +276,10 @@ for (visitor  in 1:TOT_VISITORS)
          if (best_morph==1) psm_i <- P_mt_pre[1] else psm_i <- P_mt_pre[2]
         }
 
-      # 5.2 If saw the random morph and one more then use the corresponding probability using the four conditions measured in the field
+      # 5.2 If saw a random morph twice then use the corresponding probability using the four conditions measured in the field
       if (click >=  MORPHING_OPPORTUNITY )  
         {  
+       
           ## take P_mt_true: the true success probabilities at state 2 only
           if (morph_chosen[visitor, MORPHING_OPPORTUNITY]== 1 & morph_chosen[visitor, LAST_CLICK]== 1) { psm_i <- P_mt_post[1]  } # m1m1
           if (morph_chosen[visitor, MORPHING_OPPORTUNITY]== 1 & morph_chosen[visitor, LAST_CLICK]== 2) { psm_i <- P_mt_post[2]  } # m1m2
@@ -313,23 +306,46 @@ for (visitor  in 1:TOT_VISITORS)
              
              # Gets prm from morph seen
              delta <-  rbinom(1, 1, psm_i)
-             delta_sm[true_state[LAST_CLICK], morph_chosen[visitor,LAST_CLICK] ]<- delta_sm[true_state[LAST_CLICK], morph_chosen[visitor,LAST_CLICK] ] + delta # changed to LAST_CLICK
              
-             if (is.element(MODEL, c(RANDOM, HMM_BANDIT, HMM_MAB_NO_DP, HMM_BANDIT, HMM_BANDIT_4P, HMM_BANDIT_STORE) ) )  {qs_algo <-qs_HMM[LAST_CLICK,] } else {qs_algo <- qs_HULB[LAST_CLICK,] }   # set which state estimate to use
+             if (is.element(MODEL, c(RANDOM, HMM_BANDIT, HMM_MAB_NO_DP, HMM_BANDIT, HMM_BANDIT_4P, HMM_BANDIT_STORE) ) )  
+             {qs_algo <-qs_HMM[LAST_CLICK,] 
+              qs_algo_before_morphing<-qs_HMM[MORPHING_OPPORTUNITY-1, ]
+               } else {
+                 qs_algo <- qs_HULB[LAST_CLICK,] 
+                 qs_algo_before_morphing <- qs_HULB[MORPHING_OPPORTUNITY-1, ]
+              }   # set which state estimate to use
              ## use fractional updating with state probability estimates to update alpha and beta
-             fraction <- qs_algo 
-             
+             fraction <- qs_algo      
+             fraction_before_morphing <- qs_algo_before_morphing
           }  
        
       ######### 7 Learn: updates alpha, beta  with qs_algo depending  on method being HULB or HMM ####
+        if (click < MORPHING_OPPORTUNITY ) {
+          delta_sm_pre[true_state[LAST_CLICK], morph_chosen[visitor, LAST_CLICK] ]<- delta_sm_pre[true_state[LAST_CLICK], morph_chosen[visitor,LAST_CLICK] ] + delta # changed to LAST_CLICK
+           eta_1=1
             for (s in 1:TOT_STATES) 
                 {
-                 alpha_PRE[s, best_morph] <- alpha_PRE[s, best_morph]+      delta * fraction[s]
-                 beta_PRE[s, best_morph]  <- beta_PRE[s, best_morph] + (1 - delta)* fraction[s]   
-                 
-              alpha_POST[s, best_morph] <- alpha_POST[s, best_morph]+      delta * fraction[s]
-              beta_POST[s, best_morph]  <- beta_POST[s, best_morph] + (1 - delta)* fraction[s]  
+                 alpha_PRE[s, best_morph] <- alpha_PRE[s, best_morph]+      delta * fraction[s]*eta_1
+                 beta_PRE[s, best_morph]  <- beta_PRE[s, best_morph] + (1 - delta)* fraction[s]*eta_1   
+            }    
+                  
+          }else{ 
+            eta_1=(MORPHING_OPPORTUNITY-1)/LAST_CLICK
+            eta_2=(LAST_CLICK-MORPHING_OPPORTUNITY+1)/LAST_CLICK
+            
+            delta_sm_pre[true_state[(MORPHING_OPPORTUNITY-1)], morph_chosen[visitor,(MORPHING_OPPORTUNITY-1)] ]<- delta_sm_pre[true_state[(MORPHING_OPPORTUNITY-1)], morph_chosen[visitor, (MORPHING_OPPORTUNITY-1)] ] + delta *eta_1
+            delta_sm_post[true_state[LAST_CLICK], morph_chosen[visitor,LAST_CLICK] ]<- delta_sm_post[true_state[LAST_CLICK], morph_chosen[visitor,LAST_CLICK] ] + delta*eta_2 # changed to LAST_CLICK
+            
+              for (s in 1:TOT_STATES) 
+                {
+              alpha_PRE[s, morph_chosen[visitor, (MORPHING_OPPORTUNITY-1)]] <- alpha_PRE[s, morph_chosen[visitor, (MORPHING_OPPORTUNITY-1)]]+      delta * fraction_before_morphing[s]*eta_1
+              beta_PRE[s, morph_chosen[visitor, (MORPHING_OPPORTUNITY-1)]]  <- beta_PRE[s, morph_chosen[visitor, (MORPHING_OPPORTUNITY-1)]] + (1 - delta)* fraction_before_morphing[s]*eta_1 
+               
+              alpha_POST[s, best_morph] <- alpha_POST[s, best_morph]+      delta * fraction[s]*eta_2
+              beta_POST[s, best_morph]  <- beta_POST[s, best_morph] + (1 - delta)* fraction[s]*eta_2  
             }
+         
+        }
           
       ######## 8 Monitor G for pre and post ####
       for (s in 1:TOT_STATES) 
@@ -342,7 +358,8 @@ for (visitor  in 1:TOT_VISITORS)
       } 
       
       success_per_visitor[visitor] <- delta
-      success_prob_runAverage[visitor]=sum(delta_sm)/visitor
+      success_prob_runAverage_pre[visitor]=sum(delta_sm_pre)/visitor
+      success_prob_runAverage_post[visitor]=sum(delta_sm_post)/visitor
       
               
 } # close visitor loop  
@@ -363,30 +380,44 @@ monitor_G=as_tibble(monitor_G_m1_s_POST) %>%
                                TRUE ~ "S2M2"))
 
 monitor_G %>% 
-  filter(Visitor %in% 200:100000) %>% 
+  filter(Visitor %in% 2000:100000) %>% 
   ggplot(aes(x=Visitor, y=Index, color=state_morph))+
   labs(title="Gittins index POST")+
   geom_line()
 
 
+## monitor G for m1 vs m2 PRE -----
+colnames(monitor_G_m1_s_PRE)<- colnames(monitor_G_m2_s_PRE)<-c("State 1", "State 2")
+monitor_G=as_tibble(monitor_G_m1_s_PRE) %>% 
+  mutate(Visitor=1:TOT_VISITORS) %>% 
+  pivot_longer(-Visitor, names_to="State", values_to="Index") %>% 
+  mutate(Morph=c("Morph 1")) %>% 
+  bind_rows(as_tibble(monitor_G_m2_s_PRE) %>% 
+              mutate(Visitor=1:TOT_VISITORS) %>% 
+              pivot_longer(-Visitor, names_to="State", values_to="Index") %>% 
+              mutate(Morph=c("Morph 2")) ) %>% 
+  mutate(state_morph=case_when(State== 'State 1' & Morph== "Morph 1" ~ "S1M1",
+                               State== 'State 2' & Morph== "Morph 1" ~ "S2M1",
+                               State== 'State 1' & Morph== "Morph 2" ~ "S1M2",
+                               TRUE ~ "S2M2"))
 
-GI_plot=monitor_G%>% 
-  filter(Visitor %in% 1:15000) %>% 
+monitor_G %>% 
+  filter(Visitor %in% 2000:50000) %>% 
   ggplot(aes(x=Visitor, y=Index, color=state_morph))+
-  geom_line( )+
-  scale_color_manual(labels=c( "State 1 / Morph 1", "State 1 / Morph 2", "State 2 / Morph 1", "State 2 / Morph 2"), 
-                     values=c( "darkred", "firebrick2", "darkblue", "blue1") ) +
-  labs(y='Gittins Index', color="State/Morph")+
-  theme_classic()+theme(legend.position = "bottom") 
+  labs(title="Gittins index PRE")+
+  geom_line()
 
-GI_plot
+## true success rate vs. model estimated one
+mean(P_mt_post); mean(P_mt_pre); 
+(success_rate_pre  <- sum(delta_sm_pre)/TOT_VISITORS)
+(success_rate_post  <- sum(delta_sm_post)/TOT_VISITORS)
+table(morph_chosen[,K_FULL])  
 
+(overall_success_rate = (sum(delta_sm_pre) + sum(delta_sm_post)) / TOT_VISITORS)
 
-plot_scale <- 4
-plot_aspect <- 2
-save_plot <- purrr::partial(ggsave, width = plot_aspect * plot_scale, height = 1 * plot_scale)
-PATH_PLOTS ="~/Documents/Algo_study_May2021/plots"
-save_plot(paste0(PATH_PLOTS, '/Gittins_index_simulation_data_15K.pdf') )
+## monitor G for m1 vs m2, in state 2
+plot(monitor_G_m1_s_POST[10000:40000, 1], type="l")  
+lines(monitor_G_m2_s_POST[10000:40000, 1], col="red")  
 
 plot(G_asym_m1_POST[5000:40000, 1], type="l")  
 lines(G_asym_m2_POST[5000:40000, 1], col="red")  
@@ -396,15 +427,10 @@ lines(G_asym_m2_POST[10000:40000, 2], col="red")
 
 plot( success_prob_runAverage[3000:40000], type="l")
 
-## true success rate vs. model estimated one
-mean(P_mt_post); mean(P_mt_pre); 
-table(morph_chosen[,K_FULL])  
-sum(delta_sm)
-overall_success_rate = sum(delta_sm) / TOT_VISITORS
 
 # VI. Results - successes per state and morph #############
 if (!GUI_IS_RUNNING) { setwd(PATH_OUT) } 
-save.image("HMM_Bandit_Store_single_run.RData")
+save.image("HMM_BANDIT_single_run.RData")
 
 load("Random_single_run.RData")
 
@@ -498,8 +524,8 @@ monitor_Success_Prob %>% filter(Visitor %in% 2000:4000)
   delta_sm
      
   # for table 7
-  #  summarys
-  #  summary_sm
+    summarys
+    summary_sm
       
    
    

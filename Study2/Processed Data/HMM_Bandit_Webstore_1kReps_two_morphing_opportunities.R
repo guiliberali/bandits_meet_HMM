@@ -104,7 +104,7 @@
   INIT_STATES <- TOT_STATES
   
   # Load G table
-  Gmatrix   <- read.table(paste(FILENAME_G, sep="") ) 
+  Gmatrix <- read.table('../Raw Data/Gmatrix.out')
   
   # Load HMM estimated parameters - geometric emission probs (model-based probabilities to bounce)
   geometric_emission_probs <- read.csv(FILENAME_GEOM_EM_PROBS, header=T)

@@ -1,0 +1,14 @@
+Model,param,value
+Model_2ST,mu11,1.4655
+Model_2SNT,mu11,1.3077
+Model_2SNT,mu21,-0.9525
+Model_3ST,mu11,1.1636
+Model_3ST,mu21,-0.2213
+Model_3ST,mu12,3.6385
+Model_3ST,mu22,0.5394
+Model_3SNT,mu11,1.4568
+Model_3SNT,mu21,-0.3586
+Model_3SNT,mu31,-1.0295
+Model_3SNT,mu12,4.1668
+Model_3SNT,mu22,0.3814
+Model_3SNT,mu32,-0.3646
