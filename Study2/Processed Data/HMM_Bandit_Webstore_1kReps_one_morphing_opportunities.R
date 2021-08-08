@@ -67,7 +67,7 @@
     PATH_OUT      <-  paste(PATH,"results",sep="")
   }  else { 
     PATH          <-  "~/GitHub/Replication_Morphing_HMM" 
-    PATH_IN       <-  paste(PATH,"_input",sep="")
+    PATH_RAW      <-  paste(PATH,"/Study2/Raw Data",sep="")
     PATH_G_MATRIX <-  "~/Dropbox/LODE/morphing@RSM/analysis/simulation using synthetic data/Alina_sims_updateNov2019/source" 
     PATH_OUT      <-  "~/Dropbox/LODE/morphing@RSM/analysis/simulation using synthetic data/RCT sims April 2021/results" 
   } 
@@ -75,17 +75,17 @@
   # HMM Configuration files  
   if (TRANSITION_COVARIATES) 
   {
-    FILENAME_MU  <- paste(PATH_IN,  "/", HMM_MODEL,"/mu_c14_2ST_RCT_April2021.csv" ,sep="")   
-    FILENAME_RHO <- paste(PATH_IN,  "/", HMM_MODEL,"/rho_c14_2ST_RCT_April2021.csv",  sep="")  
+    FILENAME_MU  <- paste(PATH_RAW,  "/", HMM_MODEL,"/mu_c14_2ST_RCT_April2021.csv" ,sep="")   
+    FILENAME_RHO <- paste(PATH_RAW,  "/", HMM_MODEL,"/rho_c14_2ST_RCT_April2021.csv",  sep="")  
   }else
   {
-    FILENAME_MU  <- paste(PATH_IN,  "/", HMM_MODEL,"/mu_c14_nocov_2ST_RCT_April2021.csv" ,sep="") 
+    FILENAME_MU  <- paste(PATH_RAW,  "/", HMM_MODEL,"/mu_c14_nocov_2ST_RCT_April2021.csv" ,sep="") 
   }
   
-  FILENAME_PSM_per_state  <- paste(PATH_IN, "/", HMM_MODEL,file= "/psm_condition_user_level_RCT_April2021_prePost.csv", sep="")
-  FILENAME_BOUNCE_PROBS  <- paste(PATH_IN, "/", HMM_MODEL,file= "/pmf_bounce_geometric_RCT_April2021.csv", sep="")  
+  FILENAME_PSM_per_state  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/psm_condition_user_level_RCT_April2021_prePost.csv", sep="")
+  FILENAME_BOUNCE_PROBS  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/pmf_bounce_geometric_RCT_April2021.csv", sep="")  
   FILENAME_G             <- paste(PATH_G_MATRIX, "/Gmatrix.out", sep="") 
-  FILENAME_GEOM_EM_PROBS  <- paste(PATH_IN, "/", HMM_MODEL,file= "/geometric_emission_probs_RCT_April2021.csv", sep="")
+  FILENAME_GEOM_EM_PROBS  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/geometric_emission_probs_RCT_April2021.csv", sep="")
   
 
   ##############################################################################
@@ -116,6 +116,7 @@
   # Load HMM estimated parameters ?
   if (TOT_STATES > 1 ) {mu_vec <-read.csv(FILENAME_MU, header=T) }
   
+
   # Load HMM estimated parameters - rho_vec is ...?
   if (TRANSITION_COVARIATES) rho_vec <- read.csv( FILENAME_RHO , header=T)
   
@@ -190,7 +191,7 @@
       # IV.   Initialize data structures used in next section for storage and loop control ####
       N        <- matrix(0, ncol=TOT_VISITORS)
       last_click  <- rep(0, TOT_VISITORS) #matrix(K_FULL, ncol=TOT_VISITORS)
-      I        <- matrix(, ncol=TOT_MORPHS)
+      I        <- matrix(0, ncol=TOT_MORPHS)
       delta_sm <- matrix(0, nrow = TOT_STATES, ncol=TOT_MORPHS); colnames (delta_sm ) <-c("abstract", "concrete"); rownames (delta_sm )<- if(TOT_STATES==2) {c("early", "late") } ; rownames (delta_sm ) <- if(TOT_STATES==3)    {c("early", "mid","late") } 
       I_evolution       <- matrix(0,nrow=TOT_VISITORS, ncol=TOT_MORPHS)
       morph_chosen      <- matrix(0,nrow=TOT_VISITORS, ncol=K_FULL+1)  
@@ -366,6 +367,7 @@
     
   })[3]
   
+
   ptime
   
   colMeans(sim_1k_reps)
