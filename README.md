@@ -9,4 +9,4 @@ The repository is structured as follows:
 
 Anyone aiming to replicate the results from the paper should first run 'Configuration.R' and read 'Data Dictionary.txt'. In the paper, two studies are performed - each has a separate folder, which is structured as follows. 
 
-![](Repository Overview.PNG)
+![Overview](Repository Overview.PNG)
