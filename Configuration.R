@@ -1,6 +1,7 @@
 # Configuration file
 # Run this file before running code from Study1 or Study2 folders
 
+
 # clean up R environment
 rm(list=ls()) 
 set.seed(9000)
@@ -48,33 +49,50 @@ TOT_CONSIDERED_PERIODS<-4
 
 # paths to use
 PATH          <-  "~/Github/Replication_Morphing_HMM/" 
-PATH_IN       <-  paste(PATH,"_input",sep="")
+PATH_RAW       <-  paste("Raw Data",sep="")
 PATH_OUT      <-  paste(PATH,"_results",sep="")
 
+# set the working directory to path
+setwd(PATH)
 
 
 
 # HMM Configuration files  
 if (TRANSITION_COVARIATES) 
 {
-  FILENAME_MU  <- paste(PATH_IN,  "/", HMM_MODEL,"/mu_c14_2ST_RCT_April2021.csv" ,sep="")   
-  FILENAME_RHO <- paste(PATH_IN,  "/", HMM_MODEL,"/rho_c14_2ST_RCT_April2021.csv",  sep="")  
+  FILENAME_MU  <- paste(PATH_RAW,  "/", HMM_MODEL,"/mu_c14_2ST_RCT_April2021.csv" ,sep="")   
+  FILENAME_RHO <- paste(PATH_RAW,  "/", HMM_MODEL,"/rho_c14_2ST_RCT_April2021.csv",  sep="")  
 }else
 {
-  FILENAME_MU  <- paste(PATH_IN,  "/", HMM_MODEL,"/mu_c14_nocov_2ST_RCT_April2021.csv" ,sep="") 
+  FILENAME_MU  <- paste(PATH_RAW,  "/", HMM_MODEL,"/mu_c14_nocov_2ST_RCT_April2021.csv" ,sep="") 
 }
 
-FILENAME_PSM_per_state  <- paste(PATH_IN, "/", HMM_MODEL,file= "/psm_condition_user_level_RCT_April2021_prePost.csv", sep="")
-FILENAME_BOUNCE_PROBS  <- paste(PATH_IN, "/", HMM_MODEL,file= "/pmf_bounce_geometric_RCT_April2021.csv", sep="")  
+FILENAME_PSM_per_state  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/psm_condition_user_level_RCT_April2021_prePost.csv", sep="")
+FILENAME_BOUNCE_PROBS  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/pmf_bounce_geometric_RCT_April2021.csv", sep="")  
 FILENAME_G             <- paste("_input/Gmatrix.out", sep="") 
-FILENAME_GEOM_EM_PROBS  <- paste(PATH_IN, "/", HMM_MODEL,file= "/geometric_emission_probs_RCT_April2021.csv", sep="")
+FILENAME_GEOM_EM_PROBS  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/geometric_emission_probs_RCT_April2021.csv", sep="")
 
 
+# set the memory limit
+memory.limit(size=50000)
 
+# load functions
+source('Functions.R' ) 
 
 # Load libraries 
-library(maotai) #for Moving-block bootstrapping
-library(nnet) # for which.is.max
-library(expm) # for matrix exponentiation %^%
-library(tidyverse)
+
+# Packes required for subsequent functions. P_load ensures these will be installed and loaded. 
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse,
+               stringr,
+               qdapRegex, 
+               anytime,
+               stringr,
+               writexl,
+               reshape2,
+               maotai,
+               nnet,
+               expm,
+               tidyverse) 
+
 
