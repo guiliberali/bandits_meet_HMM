@@ -19,7 +19,7 @@ if (TOT_STATES==1) {all_s <- matrix(1,ncol=TOT_MORPHS)}; if (TOT_STATES==2) {all
 INIT_STATES <- TOT_STATES
 
 # Load G table
-Gmatrix <- read.table('../Raw Data/Gmatrix.out')
+Gmatrix <- read.table(DROPBOX_GMATRIX_LINK)
 
 
 # Load HMM estimated parameters - Omega, to learn states from clicks

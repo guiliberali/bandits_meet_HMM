@@ -3,19 +3,8 @@
 ### Run the 'Calculating Purchase Rates.R' File before running any code here.
 
 
-SR_plot=SR_data %>% 
-  filter(Visitor %in% 100:15000) %>% 
-  ggplot(aes(x=Visitor, y=Success_rate, linetype=Treatment, color=Data_type))+
-  geom_line()+
-  #geom_vline(xintercept = c(275, 1066), size=.4, color="gray60")+
-  scale_linetype_manual(values = c(1, 3), labels=c("HMM Bandit", "Baseline") ) +
-  scale_color_manual(values=c( "black", "gray60") ) +
-  labs(y='Purchase rate (running average)',  linetype= "Treatment", color="Data type")+
-  theme_classic()+theme(legend.position = "bottom") 
-
-
-
-SR_plot=SR_data %>% 
+# For 15000 visitors
+SR_plot_15000=SR_data %>% 
   filter(Visitor %in% 100:15000) %>% 
   ggplot(aes(x=Visitor, y=Success_rate, linetype=Treatment, color=Data_type))+
   geom_line()+
@@ -24,12 +13,14 @@ SR_plot=SR_data %>%
   scale_linetype_manual(values = c(1, 3), labels=c("HMM Bandit", "Baseline") ) +
   scale_color_manual(values=c( "black", "gray60") ) +
   labs(y='Purchase rate (running average)',  linetype= "Treatment", color="Data type")+
-  theme_classic()+theme(legend.position = "bottom") 
+  theme_classic()+theme(legend.position = "bottom")
 
-SR_plot
+SR_plot_15000
+
+# For 100000 visitors
 
 ##** Figure 9 reported in the manuscript 3rd submission v June 1st 2021----
-SR_plot=SR_data %>% 
+SR_plot_100000=SR_data %>% 
   filter(Visitor %in% 100:100000) %>% 
   ggplot(aes(x=Visitor, y=Success_rate, color=Treatment))+
   geom_line()+
@@ -39,12 +30,5 @@ SR_plot=SR_data %>%
   labs(y='Purchase rate',  color= "Benchmark")+
   theme_classic()+theme(legend.position = "bottom") 
 
-SR_plot
+SR_plot_100000
 
-
-plot_scale <- 3.5
-plot_aspect <- 2.5
-save_plot <- purrr::partial(ggsave, width = plot_aspect * plot_scale, height = 1 * plot_scale)
-PATH_PLOTS ="~/Documents/Algo_study_May2021/plots"
-
-save_plot(paste0(PATH_PLOTS, '/Purchase_rate_Study2_100k_vlines.pdf') )
