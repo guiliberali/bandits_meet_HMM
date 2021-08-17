@@ -51,6 +51,7 @@ TOT_CONSIDERED_PERIODS<-4
 PATH          <-  "~/Github/Replication_Morphing_HMM/" 
 PATH_RAW       <-  paste("Raw Data",sep="")
 PATH_OUT      <-  paste(PATH,"_results",sep="")
+DROPBOX_GMATRIX_LINK= 'https://dl.dropboxusercontent.com/s/5gv7jquou6y3tlw/Gmatrix.out'
 
 # set the working directory to path
 setwd(PATH)
