@@ -22,7 +22,7 @@ RAW_DATA_PATH  = '../Raw_Data/'
 
 
 # Load G table
-Gmatrix <- read.table(paste0(RAW_DATA_PATH,'Gmatrix.out'))
+Gmatrix <- read.table(DROPBOX_GMATRIX_LINK)
 
 # Load HMM estimated parameters - geometric emission probs (model-based probabilities to bounce)
 geometric_emission_probs <- read.csv(paste0('../', FILENAME_GEOM_EM_PROBS), header=T)
