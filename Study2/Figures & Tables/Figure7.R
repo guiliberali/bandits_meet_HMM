@@ -1,7 +1,21 @@
+#######################################################################################################################
+# Author: 
+# Purpose: Replication file for Figure 7, page 36 of the paper 
+# 
+# Note: Ensure the working directory is Replication_Morphing_HMM/Study2/Figures & Tables
+#
+# Overview:
+#     A) Load in the data for each state
+#     B) Calculate changes per condition
+#     C) Define the plot
+#
+#
+#######################################################################################################################
 
 
-### Replication File for Figure 7, page 36 of the paper 
-
+################
+# A) Load in the data for each state
+################
 
 RAW_DATA="../Raw Data"
 
@@ -19,7 +33,11 @@ a=hmm_data_with_states_cond %>%
   ungroup() 
 colnames(a)=c("Click", "add_to_comp", "Condition", "Early state", "Late state")
 
-# Changes per condition
+
+################
+# B) Calculate changes per condition
+################
+
 a=a %>%  
   mutate(add_to_comp=if_else(add_to_comp==0, "Baseline", "Click on covariate" ), 
          Condition = case_when(Condition==1~"m1m1",
@@ -29,7 +47,11 @@ a=a %>%
   pivot_longer(-c(Click, add_to_comp, Condition), names_to = "State", values_to = "Prob")
 a$add_to_comp=factor(a$add_to_comp, levels = c("Baseline", "Click on covariate"))
 
-# Create plot
+
+################
+# C) Define the plot
+################
+
 alphaTR=a %>% 
   filter(Click<15) %>% 
   ggplot(aes(x=Click, y=Prob, fill=State))+

@@ -1,21 +1,24 @@
-##################### Morphing Consumer Dynamics - DP code    #############                                       
-#  Coded by Gui Liberali in December 2018/January 2019 using HULB & functions + HMM csv's from Alina Ferecatu
-#  Updated by Gui Liberali and Alina Ferecatu several times. See file "Log of updates.txt" for details.
+#######################################################################################################################
+# Author: 
+# Purpose: Gets results for webshop with one Morphing Opportunity 
+# 
+# Note: 
+#  -Run 'Configuration.R' before running this file
+#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/Processed Data
+#
+# Overview:
+#     A) Load in raw data 
+#     B) Set parameters
+#     C) Loop over all parameters
+#
+#
+#######################################################################################################################
 
-#  IMPORTANT: Run Config.R before running this code.
 
-# I.   Loaded parameters (some were initialized in the Config files) ####
 
-# set the correct working directory
-setwd(paste0(PATH, '/Study2/Processed Data'))
-
-# Process the parameters already loaded
-STATES      <- 1:TOT_STATES # needed for the draw_state funtion
- 
-HULB <- "HULB"; HMM_MAB_NO_DP <- "HMM_MAB_NO_DP"; MAB_NO_HMM <- "MAB_NO_HMM"; HMM_BANDIT_STORE <- "HMM_BANDIT_STORE"; HMM_BANDIT_4P <- "HMM_BANDIT_4P"; HMM_BANDIT <- "HMM_BANDIT" ; RANDOM <- "RANDOM" # do not change this
-if (TRANSITION_COVARIATES) XA_dim  <- 1 else XA_dim=NULL
-if (TOT_STATES==1) {all_s <- matrix(1,ncol=TOT_MORPHS)}; if (TOT_STATES==2) {all_s <- cbind(1,c(-1,1)) }; if (TOT_STATES==3) {all_s <- cbind(1, c(-1, 1, -1), c(-1, -1,1))}
-INIT_STATES <- TOT_STATES
+################
+# A) Load in raw data
+################
 
 # Raw data path
 RAW_DATA_PATH  = '../Raw_Data/'
@@ -29,6 +32,18 @@ geometric_emission_probs <- read.csv(paste0('../', FILENAME_GEOM_EM_PROBS), head
 
 # Load bounce probability based on raw number of clicks
 temp_pbounce_vec  <- read.csv(paste0('../',FILENAME_BOUNCE_PROBS) , header=T)
+
+################
+# B) Set parameters
+################
+
+# Process the parameters already loaded
+STATES      <- 1:TOT_STATES # needed for the draw_state funtion
+
+HULB <- "HULB"; HMM_MAB_NO_DP <- "HMM_MAB_NO_DP"; MAB_NO_HMM <- "MAB_NO_HMM"; HMM_BANDIT_STORE <- "HMM_BANDIT_STORE"; HMM_BANDIT_4P <- "HMM_BANDIT_4P"; HMM_BANDIT <- "HMM_BANDIT" ; RANDOM <- "RANDOM" # do not change this
+if (TRANSITION_COVARIATES) XA_dim  <- 1 else XA_dim=NULL
+if (TOT_STATES==1) {all_s <- matrix(1,ncol=TOT_MORPHS)}; if (TOT_STATES==2) {all_s <- cbind(1,c(-1,1)) }; if (TOT_STATES==3) {all_s <- cbind(1, c(-1, 1, -1), c(-1, -1,1))}
+INIT_STATES <- TOT_STATES
 
 
 # Load HMM estimated parameters ?
@@ -114,7 +129,13 @@ if (TOT_STATES > 1)
      }
 
 # Loads the psm - true purchase per click
-if (BENCHMARK == "test2") {   }  
+if (BENCHMARK == "test2") {   }
+
+
+
+################
+# C) Loop over all visitors
+################
 
 # IV.   Initialize data structures used in next section for storage and loop control ####
 N        <- matrix(0, ncol=TOT_VISITORS)

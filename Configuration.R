@@ -1,7 +1,6 @@
 # Configuration file
 # Run this file before running code from Study1 or Study2 folders
 
-
 # clean up R environment
 rm(list=ls()) 
 set.seed(9000)
@@ -78,7 +77,7 @@ FILENAME_GEOM_EM_PROBS  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/geometric_emis
 memory.limit(size=50000)
 
 # load functions
-source('Functions.R' ) 
+source('Functions.R') 
 
 # Load libraries 
 

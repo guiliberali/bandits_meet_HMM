@@ -1,56 +1,41 @@
 
 #######################################################################################################################
-# Author: Floris Holstege
-# Purpose: Gather data on alpha + beta values and Gittens index from http://mcd.hypermorphingtechnologies.com/HMT/report/22/2021/05/07   
+# Author: 
+# Purpose: Calculates Purchasing Rates 
 # 
+# Note: 
+#  -Run 'Configuration.R' before running this file
+#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/Processed Data
 #
 # Overview:
-#     A) Load necessary packages, and define several functions to download the raw data from the website, and clean it
-#     B) Functions to extract alpha + beta values, calculate gittens index
-#     C) Create plot with GIttens index
+#     A) Load in the Survey and clicks data 
+#     B) Get performance of each morph (clicks, purchase rate, etc.)
+#     C) Compare performance of morph vs random
 #
 #
 #######################################################################################################################
 
 ################
-# A) Load in data (processed and raw), and packages
+# A) Load in the Survey and clicks data 
 ################
-rm(list=ls()) # clean up R environment
 
-# Packes required for subsequent functions. P_load ensures these will be installed and loaded. 
-if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tidyverse,
-               stringr,
-               qdapRegex, 
-               anytime,
-               stringr,
-               writexl,
-               reshape2) 
-library(tidyverse)
-# get helper functions to download data
-
-#start and end dates to analyse
-start <- "2021/05/17"
-end <- "2021/05/17"
-
-
-# # sort the data on ms
-# df_cleanData_sorted <- df_cleanData %>% arrange(ms_timestamp)
+# Day to analyse 
 DAY   <- "17"
 MONTH <- "05"
 DATE     <- paste("2021_",MONTH,"_" , DAY, sep="")
 
-RAW_DATA="../Raw Data/" ## change as necessary
+# Location of the raw data
+PATH_RAW="../Raw Data/" 
 
 ### SURVEY DATA ----
-survey_data <-read_csv(paste0(RAW_DATA, "/survey_data_", DATE, ".csv"))
+survey_data <-read_csv(paste0(PATH_RAW, "/survey_data_", DATE, ".csv"))
 survey_data=survey_data %>% 
   mutate(survey_user_id=gsub("[^[:alnum:]]", "", survey_user_id) ) %>% 
   filter(grepl("es|ES", att_check_6_TEXT ) )
 
 
 ### CLICKS DATA ----
-processed_clicks_data <- list.files(path=paste0(RAW_DATA, "/processed_clicks"), full.names = TRUE) %>% 
+processed_clicks_data <- list.files(path=paste0(PATH_RAW, "/processed_clicks"), full.names = TRUE) %>% 
   lapply(read_csv) %>% 
   bind_rows 
 
@@ -59,8 +44,6 @@ processed_clicks_filtered = processed_clicks_data %>%
   mutate(user_id=gsub("[^[:alnum:]]", "", user_id)) %>% 
   filter(user_id %in% survey_data$survey_user_id) %>% 
   arrange(ms_timestamp, user_id)
-dim(processed_clicks_filtered)
-length(unique(processed_clicks_filtered$user_id))
 
 winner=processed_clicks_filtered %>% filter(grepl("IgV0dcGD2WKZSpAJoEcRHTbqGQbY5", user_id))
 
@@ -92,6 +75,10 @@ clicks_data_with_conditions= processed_clicks_filtered %>%
                                        first_morph==1 & last_morph==2 ~ 2,
                                        first_morph==2 & last_morph==1 ~ 3,
                                        TRUE ~ 4) ))
+
+################
+# B) Get performance of each morph (clicks, purchase rate, etc.)
+################
 
 ## performance of morph combo
 stacked_data = clicks_data_with_conditions %>% 
@@ -154,7 +141,7 @@ conditions_purchase_rate = stacked_data %>%
             count_n=n())
 
 
-## create running average of purchase for Figure XYZ ---- 
+## create running average of purchase for Figure 
 stacked_data_purchase_RA = stacked_data %>% 
   arrange(ms_timestamp) %>% 
   mutate(Obs=rep(1, n())) %>% 
@@ -163,16 +150,19 @@ stacked_data_purchase_RA = stacked_data %>%
   ungroup() %>% 
   mutate(Treatment=if_else(cell==0,"Random", "HMM_Bandit_Webstore") )
 
-plot(stacked_data_purchase_RA$success_prob_real[stacked_data_purchase_RA$cell==1], type="l")
 
-### PLOT OF RUNNING AV OF SUCCESSES WITH SIMS -----
-load(paste0(RAW_DATA, "/Random_single_run.RData") )
+################
+# C) Compare performance of morph vs random
+################
 
-### PLOTS RANDOM vs. various treatments based on success rates ----
+
+load(paste0(PATH_RAW, "/Random_single_run.RData") )
+
+
 monitor_Success_Prob=tibble(success_prob=success_prob_runAverage, 
                             Treatment="Random")
 
-load(paste0(RAW_DATA, "/HMM_Bandit_Store_single_run.RData") )
+load(paste0(PATH_RAW, "/HMM_Bandit_Store_single_run.RData") )
 
 TOT_VISITORS = 100000
 monitor_Success_Prob=monitor_Success_Prob %>% 
@@ -190,42 +180,23 @@ blended_data=monitor_Success_Prob %>%
   left_join(stacked_data_purchase_RA) %>% 
   mutate(Data_type=if_else(is.na(success_prob_real), "Simulated", "Observed") ) %>% 
   mutate(Success_rate=if_else(is.na(success_prob_real), success_prob, success_prob_real))
-  
-SR_plot=blended_data %>% 
-  filter(Visitor %in% 25:5000) %>% 
-  ggplot(aes(x=Visitor, y=Success_rate, linetype=Treatment, color=Data_type))+
-  geom_line()+
-  geom_vline(xintercept = c(275, 1066), size=.4, color="gray60")+
-  scale_linetype_manual(values = c(1, 3), labels=c("HMM Bandit (Webstore)", "Random") ) +
-  scale_color_manual(values=c( "black", "red") ) +
-  labs(y='Purchase rate (running average)',  linetype= "Treatment", color="Data type")+
-  theme_classic()+theme(legend.position = "bottom") 
-
-SR_plot
 
 
-plot_scale <- 3.5
-plot_aspect <- 2.5
-save_plot <- purrr::partial(ggsave, width = plot_aspect * plot_scale, height = 1 * plot_scale)
-PATH_PLOTS ="~/Documents/Algo_study_May2021/plots"
 
-save_plot(paste0(PATH_PLOTS, '/Purchase_rate_running_average.pdf') )
-
-
-### PLOTS RANDOM vs. various treatments based on success dummies----
-## based on success (0, 1)
-load(paste0(RAW_DATA, "/Random_single_run.RData") )
+## Load performance of random single run
+load(paste0(PATH_RAW, "/Random_single_run.RData") )
 
 monitor_Success_Prob=tibble(success_per_visitor=success_per_visitor, 
                             Treatment="Random")
 
 TOT_VISITORS = 100000
 
-load(paste0(RAW_DATA, "/HMM_Bandit_Store_single_run.RData") )
+load(paste0(PATH_RAW, "/HMM_Bandit_Store_single_run.RData") )
 monitor_Success_Prob=monitor_Success_Prob %>% 
   bind_rows(tibble(success_per_visitor=success_per_visitor, 
                    Treatment="HMM_Bandit_Webstore") )%>% 
-  mutate(Visitor=rep(1:TOT_VISITORS, 2) )
+  mutate(Visitor=rep(1:TOT_VISITORS, 5) )
+
 
 monitor_Success_Prob %>% 
   filter(Visitor %in% 5000:20000) %>% 
