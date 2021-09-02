@@ -93,6 +93,7 @@ pacman::p_load(tidyverse,
                maotai,
                nnet,
                expm,
-               tidyverse) 
+               tidyverse,
+               doParallel) 
 
 
