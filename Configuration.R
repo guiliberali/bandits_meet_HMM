@@ -48,7 +48,8 @@ TOT_CONSIDERED_PERIODS<-4
 
 # paths to use
 PATH          <-  "~/Github/Replication_Morphing_HMM/" 
-PATH_RAW       <-  paste("Raw Data",sep="")
+PATH_RAW       <-  paste("1. Raw Data",sep="")
+PATH_HMM_EST   <-  paste("2. HMM Estimates", sep="")
 PATH_OUT      <-  paste(PATH,"_results",sep="")
 DROPBOX_GMATRIX_LINK= 'https://dl.dropboxusercontent.com/s/5gv7jquou6y3tlw/Gmatrix.out'
 
@@ -60,17 +61,16 @@ setwd(PATH)
 # HMM Configuration files  
 if (TRANSITION_COVARIATES) 
 {
-  FILENAME_MU  <- paste(PATH_RAW,  "/", HMM_MODEL,"/mu_c14_2ST_RCT_April2021.csv" ,sep="")   
-  FILENAME_RHO <- paste(PATH_RAW,  "/", HMM_MODEL,"/rho_c14_2ST_RCT_April2021.csv",  sep="")  
+  FILENAME_MU  <- paste(PATH_HMM_EST,  "/", HMM_MODEL,"/mu_c14_2ST_RCT_April2021.csv" ,sep="")   
+  FILENAME_RHO <- paste(PATH_HMM_EST,  "/", HMM_MODEL,"/rho_c14_2ST_RCT_April2021.csv",  sep="")  
 }else
 {
-  FILENAME_MU  <- paste(PATH_RAW,  "/", HMM_MODEL,"/mu_c14_nocov_2ST_RCT_April2021.csv" ,sep="") 
+  FILENAME_MU  <- paste(PATH_HMM_EST,  "/", HMM_MODEL,"/mu_c14_nocov_2ST_RCT_April2021.csv" ,sep="") 
 }
 
-FILENAME_PSM_per_state  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/psm_condition_user_level_RCT_April2021_prePost.csv", sep="")
-FILENAME_BOUNCE_PROBS  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/pmf_bounce_geometric_RCT_April2021.csv", sep="")  
-FILENAME_G             <- paste("_input/Gmatrix.out", sep="") 
-FILENAME_GEOM_EM_PROBS  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/geometric_emission_probs_RCT_April2021.csv", sep="")
+FILENAME_PSM_per_state  <- paste(PATH_HMM_EST, "/", HMM_MODEL,file= "/psm_condition_user_level_RCT_April2021_prePost.csv", sep="")
+FILENAME_BOUNCE_PROBS  <- paste(PATH_HMM_EST, "/", HMM_MODEL,file= "/pmf_bounce_geometric_RCT_April2021.csv", sep="")  
+FILENAME_GEOM_EM_PROBS  <- paste(PATH_HMM_EST, "/", HMM_MODEL,file= "/geometric_emission_probs_RCT_April2021.csv", sep="")
 
 
 # set the memory limit

@@ -12,3 +12,8 @@ Anyone aiming to replicate the results from the paper should first run 'Configur
 <p>
     <img src="Repository Overview.PNG" width="800" height="600" />
 </p>
+
+To replicate a figure or table, in general the following steps should be followed:
+1. Check the table or figure to be replicated in the '4. Figures & Tables' map
+2. Run the files from '3. Simulation files' required for the respective figure or table
+3. Run the files from '4. Figures & Tables' for the respective figure or table, using the generated objects.

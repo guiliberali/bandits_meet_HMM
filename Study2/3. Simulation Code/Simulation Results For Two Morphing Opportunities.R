@@ -4,17 +4,15 @@
 # 
 # Note: 
 #  -Run 'Configuration.R' before running this file
-#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/Processed Data
+#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
 #
 
 #
 #
 #######################################################################################################################
 
-set.seed(9000)
 
 registerDoParallel(cores=10)
-
 
 server=T
 
@@ -93,7 +91,6 @@ INIT_STATES <- TOT_STATES
 # Load G table
 Gmatrix <- read.table(DROPBOX_GMATRIX_LINK)
 
-
 # Load HMM estimated parameters - geometric emission probs (model-based probabilities to bounce)
 geometric_emission_probs <- read.csv(FILENAME_GEOM_EM_PROBS, header=T)
 
@@ -169,8 +166,10 @@ if (TOT_STATES > 1)
 # Loads the psm - true purchase per click
 if (BENCHMARK == "test2") {   }  
 
+
 set.seed(9000)
-trials=1000
+trials=1
+
 # Loop over replicates -----
 ptime <- system.time({
   sim_1krep <- foreach(icount(trials), .packages=c('expm','nnet', 'maotai', 'tidyverse') , .combine=rbind) %dopar% {
@@ -376,258 +375,11 @@ ptime <- system.time({
     
     Success_rate = (sum(delta_sm_pre) + sum(delta_sm_post)) / TOT_VISITORS
     
-    c(Success_rate, c(delta_sm_pre), c(delta_sm_post))
+    result <- c(Success_rate, c(delta_sm_pre), c(delta_sm_post))
   }
   
 })[3]
 
-ptime
 
-colMeans(sim_1krep)
+sim_1krep
 
-
-setwd(PATH_OUT)
-save.image("sim_hmm_bandit_store_pre_post_1kRun_100K_visitors.RData")
-
-
-## compute summary stats on local----
-setwd("~/Documents/Algo_study_May2021/1k_sims_results/results" )
-load("sim_hmm_bandit_store_1kRun_pre_post_100K_visitors.RData")
-
-totReward = rowSums(sim_1krep[-1,])
-
-c(mean(totReward), 
-  t.test(totReward)$conf.int)
-hist(totReward)
-
-### FULL RESULTS   
-# 4. Results - successes per state and morph.
-# 4.1 check last-state membership
-# last_state <-last_morph <- last_qs_HULB <- last_qs_HMM <- last_qs_nature <-  true_state_binary <-  matrix (0, ncol = TOT_VISITORS)
-# for (iii in 1: TOT_VISITORS ) 
-#    {  last_state[iii]     <- true_states_everyone[iii,bounced[iii]]
-#       last_morph[iii]     <- morph_chosen[iii,bounced[iii]]
-#       last_qs_HULB[iii]   <- qs_HULB_everyone[iii,bounced[iii]]
-#       last_qs_HMM[iii]    <- qs_HMM_everyone[iii,bounced[iii]]
-#       last_qs_nature[iii] <- qs_HMM_nature_everyone[iii,bounced[iii]]
-#       if(last_state[iii]==1) { true_state_binary[iii] <- 1} else { true_state_binary[iii] <- 0} 
-#    }
-# last_state_and_morph           <- t(rbind(last_state, last_morph, last_qs_HULB, last_qs_HMM, last_qs_nature ,true_state_binary ))
-# colnames(last_state_and_morph) <- c("state", "morph", "qs_HULB_sl", "qs_HMM_sl", "qs_hMM_nature_sl", "last_true_state_binary")
-#    
-# # 4.2 Store replicate results
-# test                            <- last_state_and_morph
-# HULB_abs_error_replicates       <- sum(abs(test[,3]-test[,6]))
-# HMM_abs_error_replicates        <- sum(abs(test[,4]-test[,6]))
-# HMM_NATURE_abs_error_replicates <- sum(abs(test[,5]-test[,6])) 
-# delta_replicates                <- c(delta_sm)
-# sum_delta_replicates            <- sum(delta_sm)
-# success_rate                    <- sum(delta_sm)/TOT_VISITORS
-# state_morph_combo=true_states_everyone %>%     cbind(morph_chosen)
-# names_states                    <-  paste("s_click", 1:K_FULL, sep="") 
-# names_morphs                    <-  paste("m_click", 0:K_FULL, sep="") 
-# colnames(state_morph_combo)<-c(names_states,names_morphs)
-# state_morph_combo=data.frame(state_morph_combo) %>% mutate(visitor=1:TOT_VISITORS, s_click2=ifelse(bounced<2, NA, s_click2), s_click3=ifelse(bounced<3, NA, s_click3), s_click4=ifelse(bounced<4, NA, s_click4),
-#             m_click2=ifelse(bounced<2, NA, m_click2), m_click3=ifelse(bounced<3, NA, m_click3), m_click4=ifelse(bounced<4, NA, m_click4)                         )
-#   
-# # 4.3 state evolution by click
-# summary_s1 = state_morph_combo %>% filter(!is.na(s_click1)) %>%   group_by(s_click1) %>%   summarise(count=n())
-# summary_s2 = state_morph_combo %>% filter(!is.na(s_click2)) %>%   group_by(s_click2) %>%   summarise(count=n())
-# summary_s3 = state_morph_combo %>% filter(!is.na(s_click3)) %>%   group_by(s_click3) %>%   summarise(count=n())
-# summary_s4 = state_morph_combo %>% filter(!is.na(s_click4)) %>%   group_by(s_click4) %>%   summarise(count=n())
-# summarys   = cbind( Click_1=summary_s1$count, Click_2=summary_s2$count,   Click_3=summary_s3$count, Click_4=summary_s4$count)
-# summary_sm = state_morph_combo %>% filter(!is.na(s_click4) &!is.na(m_click4)) %>%  group_by(m_click4, s_click4) %>%  summarise(count=n())
-# summary_sm3 = state_morph_combo %>% filter(!is.na(s_click3) &!is.na(m_click3)) %>%  group_by(m_click3, s_click3) %>%  summarise(count=n())
-# summary_sm2 = state_morph_combo %>% filter(!is.na(s_click2) &!is.na(m_click2)) %>%  group_by(m_click2, s_click2) %>%  summarise(count=n())
-# summary_sm1 = state_morph_combo %>% filter(!is.na(s_click1) &!is.na(m_click1)) %>%  group_by(m_click1, s_click1) %>%  summarise(count=n())
-# summary_statemorph=c(summary_sm$count)
-# summary_state = c(summarys)
-# bounce1=length(bounced[bounced==1])/TOT_VISITORS
-# bounce2=length(bounced[bounced==2])/TOT_VISITORS
-# bounce3=length(bounced[bounced==3])/TOT_VISITORS
-# bounce4=length(bounced[bounced==4])/TOT_VISITORS
-# 
-# Overall_results=c(HULB_abs_error_replicates, HMM_abs_error_replicates,  HMM_NATURE_abs_error_replicates,
-#                      delta_replicates, success_rate,  bounce1, bounce2, bounce3, bounce4, summary_state, summary_statemorph  )
-# 
-#### SUCCESS RATES ONLY
-
-#   # 5. who recovers best? Who performs best?
-#   mean(HULB_abs_error_replicates)
-#   mean(HMM_abs_error_replicates)
-#   mean(HMM_NATURE_abs_error_replicates)
-#   # sum(delta_replicates )/TOT_REPLICATES# got to summarize this
-#   
-#      
-#   #     results for this run (see paramters above)
-#   QS_ARRIVAL
-#   QS_ARRIVAL_NATURE
-#   MODEL      
-#   TERMINAL  
-#   TOT_STATES
-#   sum_delta_replicates
-#   success_rate
-# 
-#   # for table 6
-#   delta_sm
-#     
-#   # for table 7
-#   summarys
-#   summary_sm
-#      
-#   
-#   
-#   
-#   
-#    
-#   
-#     
-#     
-#   # write results to file   
-#   setwd(PATH)
-#   write.csv(summary_sm3, "summary_sm3.csv")
-#   write.csv(summary_sm2, "summary_sm2.csv")
-#   write.csv(summary_sm1, "summary_sm1.csv")
-#   write.csv(delta_sm,"delta_sm")
-#   write.csv(summarys,"summarys.csv")
-#   write.csv(summary_sm, "summary_sm.csv")
-#   write.csv(t(sum_delta_replicates), "sum_delta_replicates.csv")
-#   write.csv(t(HULB_abs_error_replicates), "HULB_abs_error_replicates.csv")
-#   write.csv(t(HMM_abs_error_replicates), "HMM_abs_error_replicates.csv")
-#   write.csv(t(HMM_NATURE_abs_error_replicates), "HMM_NATURE_abs_error_replicates.csv")
-#   write.csv(delta_replicates, "delta_replicates.csv")
-#   write.csv(monitor_G_m1_s,   "monitor_last_G_m1_s.csv")
-#   write.csv(monitor_G_m2_s,   "monitor_last_G_m2_s.csv")
-#   write.csv(t(last_state_and_morph), "last_state_and_morph.csv", col.names = TRUE)
-#   save.image("Round2_Nov1_2019.RData")
-# 
-# 
-# 
-#     
-#     
-#   
-#   
-#   
-#   
-#   
-#   
-#   
-#   
-#   
-#   
-#   
-#     
-#     
-#     
-#     
-#     
-#     
-#  
-#  ## scp ubuntu@145.100.59.55:/datastore/simhmm4_3NT.RData ~/Documents/server_files
-#  ## for the replicates
-#  ## scp -r ferecatu@lisa.surfsara.nl:rsm_sim/bin ~/Documents/server_files/out_files/pwf_gw
-#  # setwd("/Users/alinaferecatu/Dropbox/LODE/morphing@RSM/analysis/simulation using synthetic data/Alina_sims_vMay2019/results 1000 replicates/2S full with sep. delta bounce states")
-#  #  load("simhmm4_2Tfull_transitions.RData")
-#  #  load("simhulb4_2Tfull_transitions.RData")
-#   
-#   #  trials=1000
-#   #  simHMM=data.frame(resfull=simhmm4_2Tfull[,8], Cond=rep("HMM_4K", trials))
-#   #  simHULB=data.frame(resfull=simhulb4_2Tfull[,8], Cond=rep("HULB_4K", trials))
-#   #  simF=rbind(simHMM, simHULB)
-#   #  simF %>% group_by(Cond) %>% summarise(meanC=mean(resfull))
-#   #  summary(aov(resfull~Cond, data=simF))
-#   #  library(dplyr)
-#   #  simF=simF %>% mutate(Model=c(rep("Forward looking", trials), rep("Myopic", trials), rep("Random", trials)))
-#   #  dim(simF)
-#   #  head(simF)
-#   #  library("Hmisc")
-#   #  violinplot=ggplot(simF, aes(x = Cond, y =resfull, group=Cond))+
-#   #    geom_boxplot(adjust = 0.5, draw_quantiles = c(0.5)) +
-#   #    stat_summary(aes(group=Cond), fun.y=mean, geom="point",
-#   #                 fill="red", shape=21, size=3, position = position_dodge(width = .9))+
-#   #       stat_summary(aes(group=Cond), fun.data=mean_cl_normal, geom = "errorbar", mult = 1, fill="red")+
-#   #  facet_wrap(~ Model, scale="free")+ theme_grey()+
-#   #  scale_x_continuous(limits = c(0.03,0.06)) +
-#   #  scale_fill_manual(values = c("#00BFC4","#F8766D")) +
-#   #  labs(x = "Scenario", y = "Expected Success")
-#   #  violinplot
-#  
-#  ### bouncing hist
-#  bouncedHMM=simhmm4_2Tfull[,17:20]
-#  colMeans(bouncedHMM)
-#  bouncedHULB=simhulb4_2Tfull[,9:12]
-#  colMeans(bouncedHULB)
-# 
-#  
-#  simHMM=data.frame(resfull=bouncedHMM, Cond=rep("HMM_4K", trials))
-#  simHULB=data.frame(resfull=bouncedHULB, Cond=rep("HULB_4K", trials))
-#  
-#  simF=rbind(simHMM, simHULB)
-#  simF %>% group_by(Cond) %>% summarise(meanC=mean(resfull))
-#  summary(aov(resfull~Cond, data=simF))
-#  library(dplyr)
-#  # simF=simF %>% mutate(Model=c(rep("Forward looking", trials), rep("Myopic", trials), rep("Random", trials)))
-#  dim(simF)
-#  head(simF)
-#  
-#  library("Hmisc")
-#  bounce_plot=ggplot(simF, aes(x=resfull,fill=Cond))+
-#    geom_histogram(position="dodge2") 
-#  bounce_plot
-#  
-#  stat_summary(aes(group=Cond), fun.y=mean, geom="point",
-#               fill="red", shape=21, size=3, position = position_dodge(width = .9))+
-#  stat_summary(aes(group=Cond), fun.data=mean_cl_normal, geom = "errorbar", mult = 1, fill="red")+
-#    #facet_wrap(~ Model, scale="free")+ theme_grey()+
-#    #scale_x_continuous(limits = c(0.03,0.06)) +
-#    #scale_fill_manual(values = c("#00BFC4","#F8766D")) +
-#   labs(x = "Scenario", y = "Expected Success")
-#   violinplot
-#  
-#  
-#  
-#  #  successes per state and morph?
-#  simF %>% group_by(Cond) %>% summarize(a=mean(resfull))
-#  delta_sm
-#  (overall_success_rate=sum(delta_sm)/TOT_VISITORS)
-#   
-#  
-#  ## state transitions
-#  stateHMM=array(c(simhmm4_2Tfull[,9:16]), dim=c(1000,2, 4))
-#  stateHMM[1,,]
-#  stateClick1=stateHMM[,,1]  
-#  (propSC1=mean(stateClick1[,2]/rowSums(stateClick1)))
-#  stateClick2=stateHMM[,,2]  
-#  (propSC2=mean(stateClick2[,2]/rowSums(stateClick2)))
-#  stateClick3=stateHMM[,,3]  
-#  (propSC3=mean(stateClick3[,2]/rowSums(stateClick3)))
-#  stateClick4=stateHMM[,,4]  
-#  (propSC4=mean(stateClick4[,2]/rowSums(stateClick4)))
-#  c(mean(stateClick1[,1]), mean(stateClick2[,1]), mean(stateClick3[,1]), mean(stateClick4[,1]))
-#  c(mean(stateClick1[,2]), mean(stateClick2[,2]), mean(stateClick3[,2]), mean(stateClick4[,2]))
-#  
-#  ## state transitions
-#  stateHULB=array(c(simhulb4_2Tfull[,13:20]), dim=c(1000,2, 4))
-#  stateHULB[1,,]
-#  stateClick1=stateHULB[,,1]  
-#  (propSC1=mean(stateClick1[,2]/rowSums(stateClick1)))
-#  stateClick2=stateHULB[,,2]  
-#  (propSC2=mean(stateClick2[,2]/rowSums(stateClick2)))
-#  stateClick3=stateHULB[,,3]  
-#  (propSC3=mean(stateClick3[,2]/rowSums(stateClick3)))
-#  stateClick4=stateHULB[,,4]  
-#  (propSC4=mean(stateClick4[,2]/rowSums(stateClick4)))
-#  c(mean(stateClick1[,1]), mean(stateClick2[,1]), mean(stateClick3[,1]), mean(stateClick4[,1]))
-# c(mean(stateClick1[,2]), mean(stateClick2[,2]), mean(stateClick3[,2]), mean(stateClick4[,2]))
-# 
-# ## state-morph combo at the last click
-# ## average number of m2 served at the last click
-# statemHULB=rowSums(simhulb4_2Tfull[,23:24])
-# hist(statemHULB)
-# mean(statemHULB)
-# 
-# 
-# statemHMM=rowSums(simhmm4_2Tfull[,31:32])
-# hist(statemHMM)
-# mean(statemHMM)
-# 

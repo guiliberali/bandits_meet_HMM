@@ -18,6 +18,7 @@
 ################
 # A) Load in the Survey and clicks data 
 ################
+getwd()
 
 # Day to analyse 
 DAY   <- "17"
@@ -25,7 +26,7 @@ MONTH <- "05"
 DATE     <- paste("2021_",MONTH,"_" , DAY, sep="")
 
 # Location of the raw data
-PATH_RAW="../Raw Data/" 
+PATH_RAW="../1. Raw Data/" 
 
 ### SURVEY DATA ----
 survey_data <-read_csv(paste0(PATH_RAW, "/survey_data_", DATE, ".csv"))

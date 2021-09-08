@@ -2,6 +2,8 @@
 # Author: 
 # Purpose: Replication file for Figure 7, page 36 of the paper 
 # 
+# In order to replicate figure 7, run from processed data the file 'Calculating Purchase Rates.R'
+#
 # Note: Ensure the working directory is Replication_Morphing_HMM/Study2/Figures & Tables
 #
 # Overview:

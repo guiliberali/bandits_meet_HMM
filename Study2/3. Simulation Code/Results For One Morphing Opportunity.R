@@ -4,7 +4,7 @@
 # 
 # Note: 
 #  -Run 'Configuration.R' before running this file
-#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/Processed Data
+#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
 #
 # Overview:
 #     A) Load in raw data 
@@ -21,8 +21,7 @@
 ################
 
 # Raw data path
-RAW_DATA_PATH  = '../Raw_Data/'
-
+RAW_DATA_PATH  = '../1. Raw_Data/'
 
 # Load G table
 Gmatrix <- read.table(DROPBOX_GMATRIX_LINK)
