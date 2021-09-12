@@ -4,7 +4,7 @@
 # 
 # Note: 
 #  -Run 'Configuration.R' before running this file
-#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/Processed Data
+#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
 #
 # Overview:
 #     A) Load in raw data 
@@ -14,6 +14,8 @@
 #
 #######################################################################################################################
 
+getwd()
+setwd('study2/3. Simulation Code')
 
 ################
 # A) Load in raw data

@@ -11,8 +11,7 @@
 #
 #######################################################################################################################
 
-
-registerDoParallel(cores=10)
+fregisterDoParallel(cores=10)
 
 server=T
 
@@ -56,34 +55,30 @@ TOT_PERIODS=K_FULL
 TOT_CONSIDERED_PERIODS<-4
 
 
-# path for raw data
-PATH_RAW = '../Raw Data'
+# path for hmm estimate data
+PATH_HMM_EST = '../2. HMM Estimates'
 
   
 # HMM Configuration files  
 if (TRANSITION_COVARIATES) 
 {
-  FILENAME_MU  <- paste(PATH_RAW,  "/", HMM_MODEL,"/mu_c14_2ST_RCT_April2021.csv" ,sep="")   
-  FILENAME_RHO <- paste(PATH_RAW,  "/", HMM_MODEL,"/rho_c14_2ST_RCT_April2021.csv",  sep="")  
+  FILENAME_MU  <- paste(PATH_HMM_EST,  "/", HMM_MODEL,"/mu_c14_2ST_RCT_April2021.csv" ,sep="")   
+  FILENAME_RHO <- paste(PATH_HMM_EST,  "/", HMM_MODEL,"/rho_c14_2ST_RCT_April2021.csv",  sep="")  
 }else
 {
-  FILENAME_MU  <- paste(PATH_RAW,  "/", HMM_MODEL,"/mu_c14_nocov_2ST_RCT_April2021.csv" ,sep="") 
+  FILENAME_MU  <- paste(PATH_HMM_EST,  "/", HMM_MODEL,"/mu_c14_nocov_2ST_RCT_April2021.csv" ,sep="") 
 }
 
 
-FILENAME_PSM_per_state  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/psm_condition_user_level_RCT_April2021_prePost.csv", sep="")
-FILENAME_BOUNCE_PROBS  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/pmf_bounce_geometric_RCT_April2021.csv", sep="")  
-FILENAME_G             <- paste(PATH_RAW, "/Gmatrix.out", sep="") 
-FILENAME_GEOM_EM_PROBS  <- paste(PATH_RAW, "/", HMM_MODEL,file= "/geometric_emission_probs_RCT_April2021.csv", sep="")
+FILENAME_PSM_per_state  <- paste(PATH_HMM_EST, "/", HMM_MODEL,file= "/psm_condition_user_level_RCT_April2021_prePost.csv", sep="")
+FILENAME_BOUNCE_PROBS  <- paste(PATH_HMM_EST, "/", HMM_MODEL,file= "/pmf_bounce_geometric_RCT_April2021.csv", sep="")  
+FILENAME_GEOM_EM_PROBS  <- paste(PATH_HMM_EST, "/", HMM_MODEL,file= "/geometric_emission_probs_RCT_April2021.csv", sep="")
 
 
 ##############################################################################
 # Key Frequently-Used Parameters  
 
 # Load functions and support code. IMPORTANT: Run Config.R before running this code.
-
-# Loading dock: data and functions   
-source( "Functions.R")  
 
 
 # Process the parameters already loaded
@@ -173,7 +168,7 @@ if (TOT_STATES > 1)
 if (BENCHMARK == "test2") {   }  
 
 set.seed(9000)
-trials=1
+trials=1000
 
 
 # Loop over replicates -----
