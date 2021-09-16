@@ -19,7 +19,7 @@ server=T
 EMPIRICAL_SETTING     <- "PHONE STORE"  
 
 # Model specs: "HULB","HMM_MAB_NO_DP","MAB_NO_HMM","HMM_BANDIT",  "HMM_BANDIT_STORE", "RANDOM" 
-MODEL       <- "HMM_BANDIT" 
+MODEL       <- "RANDOM" 
 
 # HMM model to update states. This is also the folder used to store the HMM input files
 HMM_MODEL   <- "geomtricHMM_estimates_April2021"
@@ -173,7 +173,7 @@ trials=1
 
 # Loop over replicates -----
 ptime <- system.time({
-  sim_1krep_two_morph <- foreach(icount(trials), .packages=c('expm','nnet', 'maotai', 'tidyverse') , .combine=rbind) %dopar% {
+  sim_1krep_random_morph <- foreach(icount(trials), .packages=c('expm','nnet', 'maotai', 'tidyverse') , .combine=rbind) %dopar% {
     # IV.   Initialize data structures used in next section for storage and loop control ####
     N        <- matrix(0, ncol=TOT_VISITORS)
     last_click  <- rep(0, TOT_VISITORS) #matrix(K_FULL, ncol=TOT_VISITORS)
@@ -382,5 +382,5 @@ ptime <- system.time({
 })[3]
 
 
-sim_1krep_two_morph[,1]
+sim_1krep_random_morph[,1]
 

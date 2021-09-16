@@ -80,11 +80,11 @@ memory.limit(size=50000)
 source('Functions.R') 
 
 # Load libraries 
-
 # Packes required for subsequent functions. P_load ensures these will be installed and loaded. 
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(tidyverse,
                stringr,
+               stargazer,
                qdapRegex, 
                anytime,
                stringr,
@@ -94,6 +94,12 @@ pacman::p_load(tidyverse,
                nnet,
                expm,
                tidyverse,
-               doParallel) 
+               doParallel,
+               rstan,
+               loo,
+               devtools) 
 
-
+# special case: install from source
+# if already installed: just load with library()
+install.packages("RcppParallel", type = "source")
+library(RcppParallel)

@@ -361,9 +361,7 @@ for (visitor  in 1:TOT_VISITORS)
 
 
 
-## Overall success rate of one morph
 
-overall_success_rate_one_morph = sum(delta_sm) / TOT_VISITORS
 
 
 

@@ -1,6 +1,6 @@
 
 ### Replication File for Figure 9, page 40 of the paper 
-### Run the 'Calculating Purchase Rates.R' File before running any code here.
+### Run the 'Calculate Average Purchase Rates.R' File before running any code here.
 
 
 # For 15000 visitors
