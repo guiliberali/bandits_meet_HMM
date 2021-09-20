@@ -66,6 +66,27 @@ Transition_Matrix <- function(XA, rho, mu,Q0_K, DIM_NON_TERMINAL_STATES, TERMINA
   return(Aij)
 }
 
+Transition_Matrix_study1 <- function(XA, rho, mu, DIM_STATES, TERMINAL)
+{  
+  ## initialize a (K-1)*K transition matrix per morph. 
+  Aij=array( ,dim=c(DIM_STATES, TOT_STATES, TOT_MORPHS))
+  for(m in 1: TOT_MORPHS)
+  { 
+    ## for each morph, compute the probability of staying in state 1
+    if(TOT_STATES==2){
+      if (TERMINAL) {Aij[,1,m]=1-inv_logit(-mu[,,m]+XA%*%rho[,,m])} else
+      {Aij[,1,m]=1-inv_logit(-mu[,,m]+XA%*%t(rho[,,m]))}
+      Aij[,2,m]=1-Aij[,1,m]
+    }else{
+      Aij[ ,1,m]=1-inv_logit(c(-mu[ ,1,m])+c(XA%*%t(rho[, ,m])))
+      Aij[ ,2,m]=inv_logit(c(-mu[ ,1,m])+c(XA%*%t(rho[, ,m])))-inv_logit(c(-mu[ ,2,m])+c(XA%*%t(rho[, ,m])))
+      Aij[ ,3,m]=inv_logit(c(-mu[ ,2,m])+c(XA%*%t(rho[,,m])))
+    }
+  }
+  return(Aij)
+}
+
+
 ############### Estimate_future_period_qs_general(Q0)  ############################
 # qs=QS_ARRIVAL
 # tr_matrix=Q0
@@ -302,6 +323,28 @@ Compute_click_prob_restrictedMultinomialLogit <- function(D_in, Omega_in)
   }    # close index_previous_pagechosen loop
   return(prob)
 }
+
+#####################
+# Used for study 1
+
+Compute_click_prob<-function(K_FULL)
+{
+  ## computes the denominator per page_id
+  den<-matrix(, nrow=K_FULL, ncol=TOT_STATES)
+  for (k in 1:K_FULL)   {for(s in 1:TOT_STATES)
+  {den[k, s] = sum(exp(Ckjn[Ckjn[,1]==k,2:ncol(Ckjn)] %*% omega %*% all_s[s,]))   }    }
+  
+  ## computes the probability per link_id
+  temp <- array(,c(TOT_STATES,TOT_LINKS, TOT_MORPHS))
+  for (m in 1:TOT_MORPHS)  {for(s in 1:TOT_STATES) {for (j in 1:TOT_LINKS) 
+  { temp[s, j, m] = exp(Ckjn[j,2:ncol(Ckjn)] %*% omega %*% all_s[s,]) / den[Ckjn[j,1], s] }}  }
+  
+  ## appends the page_id, to be used in the Y_vec
+  temp1 <- array(,c((TOT_STATES+1),TOT_LINKS, TOT_MORPHS))
+  for (m in 1:TOT_MORPHS) {temp1[,,m]=rbind(Ckjn[,1], temp[,,m])}
+  return(temp1)
+}
+
 
 ############### G_interpolation_fast  ####### 
 # retrives the gittins index via interpolation, because we don't have integer alphas and betas 

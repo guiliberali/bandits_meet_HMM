@@ -353,5 +353,4 @@ ptime <- system.time({
   
 })[3]
 
-ptime
-sim_1k_reps_one_morph[1,]
+

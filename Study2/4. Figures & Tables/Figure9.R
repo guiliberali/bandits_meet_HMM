@@ -1,9 +1,24 @@
 
-### Replication File for Figure 9, page 40 of the paper 
-### Run the 'Calculate Average Purchase Rates.R' File before running any code here.
+
+#######################################################################################################################
+# Author: 
+# Purpose: Generates Figure 9 from page 40 of the paper
+# 
+# Note: 
+#  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
+#  -After that, run '3. Simulation Code/Calculate Average Purchase Rates.R'
+#
+#  Overview:
+#     A) Plot for 15000 visitors
+#     B) Plot for 100000 visitors
+#
+#######################################################################################################################
 
 
-# For 15000 visitors
+############
+# A) Plot for 15000 visitors
+############
+
 SR_plot_15000=SR_data %>% 
   filter(Visitor %in% 100:15000) %>% 
   ggplot(aes(x=Visitor, y=Success_rate, linetype=Treatment, color=Data_type))+
@@ -14,12 +29,13 @@ SR_plot_15000=SR_data %>%
   scale_color_manual(values=c( "black", "gray60") ) +
   labs(y='Purchase rate (running average)',  linetype= "Treatment", color="Data type")+
   theme_classic()+theme(legend.position = "bottom")
-
 SR_plot_15000
 
-# For 100000 visitors
 
-##** Figure 9 reported in the manuscript 3rd submission v June 1st 2021----
+############
+# A) Plot for 100000 visitors
+############
+
 SR_plot_100000=SR_data %>% 
   filter(Visitor %in% 100:100000) %>% 
   ggplot(aes(x=Visitor, y=Success_rate, color=Treatment))+

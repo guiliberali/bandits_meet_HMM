@@ -29,7 +29,6 @@
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
-
 ## Source functions ----
 source("HMM_functions_Application2.R" ) 
 ## Compile the HMM model
@@ -88,18 +87,26 @@ prob_cov_click7=hmm_dataset_T %>% filter(Tlength<8) %>%
 # B) Make HMM estimates with Stan
 ###########
 
-
-### function to get HMM estimate, uses Stan
 HMM_estimate_condition <- function(hmm_dataset_T, condition){
+  
+  
   
   ## no cov on emission prob, "add-to-comparison" covariate on transition probs
   #* Construct condition-level hmm dataset ----
   ## Change condition_reassigned to 2, 3, and 4 to estimate the HMM models for each condition. 
-  hmm_data_condition=hmm_dataset_T %>% 
-    filter(condition_reassigned==condition) %>% 
-    # remove 2 users who moved straight to survey (did not click on the website)
-    # for condition 1 "GVy6y1x89W8LKRRHpFAAEyam587pz" #for condition 4 #"0wMm9bCTVEAlsXnszDlSJxLO63JtdeB"
-    filter(user_id!= "GVy6y1x89W8LKRRHpFAAEyam587pz") %>%  
+  hmm_data_condition=hmm_dataset_T[hmm_dataset_T$condition_reassigned== condition,]
+  
+  if(condition==1){
+    hmm_data_condition <- hmm_data_condition %>%filter(user_id!= "GVy6y1x89W8LKRRHpFAAEyam587pz")
+    
+  }
+  if(condition==4){
+    hmm_data_condition <- hmm_data_condition %>%filter(user_id!= "0wMm9bCTVEAlsXnszDlSJxLO63JtdeB")
+    
+  }
+  
+  
+  hmm_data_condition <- hmm_data_condition %>% 
     filter(total_clicks!=1) %>% 
     filter(!grepl("finished-checking-out", destination_url)) %>% ## remove end-page with explanation in the clickstream
     group_by(user_id) %>% 
@@ -111,10 +118,11 @@ HMM_estimate_condition <- function(hmm_dataset_T, condition){
                  dplyr::select(Cumul_outcome_addTo))
   
   
-  
   ## number of clicks per product, per individual
   N=nrow(hmm_data_condition)
   Nind=length(unique(hmm_data_condition$user_id))
+  
+  
   
   K_EST=2
   stan.data = list(
@@ -132,9 +140,9 @@ HMM_estimate_condition <- function(hmm_dataset_T, condition){
   )
   
   hmm2ST_geometric_ind_cov_compOnly <- stan(model_code = hmm_terminal_geometric_ind_cov, data = stan.data,
-                                            verbose = TRUE, chains = 2, seed = 123456789, 
-                                            iter = 50, warmup = 40, 
-                                            control = list(adapt_delta=0.99, max_treedepth=15) )
+                                                verbose = TRUE, chains = 2, seed = 123456789, 
+                                                iter = 50, warmup = 40, 
+                                                control = list(adapt_delta=0.99, max_treedepth=15) )
   
   return(hmm2ST_geometric_ind_cov_compOnly)
   
@@ -148,6 +156,8 @@ hmm2ST_geometric_ind_c2r_cov_compOnly <- HMM_estimate_condition(hmm_dataset_T = 
 hmm2ST_geometric_ind_c3r_cov_compOnly <- HMM_estimate_condition(hmm_dataset_T = hmm_dataset_T, 3)
 hmm2ST_geometric_ind_c4r_cov_compOnly <- HMM_estimate_condition(hmm_dataset_T = hmm_dataset_T, 4)
 
+hmm_dataset_T %>%
+  filter(condition ==3)
 
 ###################
 # C) Generate several parameters for simulations: 
@@ -178,7 +188,7 @@ beta_m4[2,]=beta_m4[1,]+exp(beta_m4[2,])
 
 pars=rbind(c(mu_m1, mu_m2), c(rho_m1, rho_m2), c(beta_m1[1,], beta_m2[1,]), c(beta_m1[2,], beta_m2[2,]),
            c(mu_m3, mu_m4), c(rho_m3, rho_m4), c(beta_m3[1,], beta_m4[1,]), c(beta_m3[2,], beta_m4[2,]))
-
+pars
 
 stargazer(pars, summary = F, align=T)
 
@@ -328,6 +338,7 @@ success_prob_after_c7=stacked_dataset_with_Tlength %>%
 
 ## used as success probabilities in the simulations - (psm_condition_user_level_RCT_April2021_prePost.csv) 
 psm_condition_user_level_RCT_April2021_prePost <- success_prob_after_c7
+psm_condition_user_level_RCT_April2021_prePost
 
 ###* Bounce rate per conditon, necessary for the sims (pmf_bounce_geometric_RCT_April2021.csv)
 last_click_distr = hmm_data_with_states_cond %>% 
@@ -340,13 +351,11 @@ last_click_distr = hmm_data_with_states_cond %>%
   left_join(participant_stacked_data %>% 
               dplyr::select(user_id, outcome_var, condition_reassigned)) 
 
-pmf_bounce_geometric_RCT_April2021 <- last_click_distr
-
 ## fit a geometric distribution to evaluate the bounce rate at every click, conditions 1 and 4
 geom_distr=MASS::fitdistr(last_click_distr$last_click_number[last_click_distr$condition_reassigned==1],"geometric")
 geom_distr$estimate
 geom_distr=MASS::fitdistr(last_click_distr$last_click_number[last_click_distr$condition_reassigned==4],"geometric")
 geom_distr$estimate
 
-geometric_emission_probs_RCT_April2021 <- geom_distr
 
+setwd('/Users/flori/OneDrive/Documents/Github/Replication_Morphing_HMM/Study2/2. HMM Estimates')

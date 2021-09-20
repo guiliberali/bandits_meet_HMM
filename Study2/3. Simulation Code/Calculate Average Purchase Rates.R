@@ -5,7 +5,7 @@
 # 
 # Note: 
 #  -Run 'Configuration.R' before running this file
-#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/Processed Data
+#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
 #
 # Overview:
 #     A) Load in the Survey and clicks data 
@@ -15,10 +15,13 @@
 #
 #######################################################################################################################
 
+getwd()
+setwd('..')
+setwd('Replication_Morphing_HMM/')
+setwd('study2/3. Simulation Code')
 ################
 # A) Load in the Survey and clicks data 
 ################
-getwd()
 
 # Day to analyse 
 DAY   <- "17"
@@ -100,7 +103,7 @@ funnel_reg=glm(formula = total_clicks ~ as.factor(condition),
                data = stacked_data)
 summary(funnel_reg)
 
-##** success rates and people in teratment and control----
+##** success rates and people in treatment and control----
 stacked_data %>% group_by(condition) %>% 
   filter(cell==0 & total_clicks>6) %>% 
   summarise(n())
@@ -151,7 +154,7 @@ stacked_data_purchase_RA = stacked_data %>%
   ungroup() %>% 
   mutate(Treatment=if_else(cell==0,"Random", "HMM_Bandit_Webstore") )
 
-
+stacked_data_purchase_RA
 ################
 # C) Compare performance of morph vs random
 ################
@@ -159,11 +162,8 @@ stacked_data_purchase_RA = stacked_data %>%
 
 load(paste0(PATH_RAW, "/Random_single_run.RData") )
 
-
 monitor_Success_Prob=tibble(success_prob=success_prob_runAverage, 
                             Treatment="Random")
-
-load(paste0(PATH_RAW, "/HMM_Bandit_Store_single_run.RData") )
 
 TOT_VISITORS = 100000
 monitor_Success_Prob=monitor_Success_Prob %>% 
@@ -191,12 +191,13 @@ monitor_Success_Prob=tibble(success_per_visitor=success_per_visitor,
                             Treatment="Random")
 
 TOT_VISITORS = 100000
-
+getwd()
+success_per_visitor
 load(paste0(PATH_RAW, "/HMM_Bandit_Store_single_run.RData") )
 monitor_Success_Prob=monitor_Success_Prob %>% 
   bind_rows(tibble(success_per_visitor=success_per_visitor, 
                    Treatment="HMM_Bandit_Webstore") )%>% 
-  mutate(Visitor=rep(1:TOT_VISITORS, 5) )
+  mutate(Visitor=rep(1:TOT_VISITORS, 3) )
 
 
 monitor_Success_Prob %>% 

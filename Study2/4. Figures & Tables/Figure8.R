@@ -1,9 +1,26 @@
 
-### Replication File for Figure 8, page 38 of the paper 
-### Run the 'Results for One MorphingOpportunity.R' File before running any code here.
+
+#######################################################################################################################
+# Author: 
+# Purpose: Generates Figure 8 from page 38 of the paper
+# 
+# Note: 
+#  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
+#  -After that, run '3. Simulation Code/Results for One MorphingOpportunity.R'
+#
+#  Overview:
+#     A) Monitor Gittens Index for morph 1 vs morph 2 - POST
+#     B) Plot the Gittens Index
+#
+#
+#######################################################################################################################
 
 
-## monitor G for m1 vs m2 POST -----
+
+########
+# A) Monitor Gittens Index for morph 1 vs morph 2 - POST
+########
+
 colnames(monitor_G_m1_s_POST)<- colnames(monitor_G_m2_s_POST)<-c("State 1", "State 2")
 monitor_G=as_tibble(monitor_G_m1_s_POST) %>% 
   mutate(Visitor=1:TOT_VISITORS) %>% 
@@ -19,7 +36,9 @@ monitor_G=as_tibble(monitor_G_m1_s_POST) %>%
                                TRUE ~ "S2M2"))
 
 
-
+########
+# B) PLot the Gittens Index
+########
 
 GI_plot=monitor_G%>% 
   filter(Visitor %in% 1:15000) %>% 

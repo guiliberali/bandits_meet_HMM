@@ -12,7 +12,6 @@
 #######################################################################################################################
 
 registerDoParallel(cores=10)
-
 server=T
 
 # Context:  "PHONE STORE" or "HULB2009"
@@ -169,7 +168,7 @@ if (BENCHMARK == "test2") {   }
 
 
 set.seed(9000)
-trials=1
+trials=1000
 
 # Loop over replicates -----
 ptime <- system.time({
@@ -381,6 +380,4 @@ ptime <- system.time({
   
 })[3]
 
-
-sim_1krep_two_morph[,1]
 
