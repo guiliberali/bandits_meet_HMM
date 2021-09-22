@@ -1,21 +1,18 @@
 #######################################################################################################################
 # Author: 
-# Purpose: Gets results for webshop with one Morphing Opportunity 
+# Purpose: Gets results for webshop with two Morphing Opportunities
 # 
 # Note: 
-#  -Run 'Configuration.R' before running this file
-#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
+#  -Make sure to have run 'Configuration.R' & 'Functions.R' before running this file
+#  -Ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code before running this file
 #
 # Overview:
 #     A) Load in raw data 
 #     B) Set parameters
-#     C) Loop over all parameters
+#     C) Loop over all visitors
 #
 #
 #######################################################################################################################
-
-getwd()
-setwd('study2/3. Simulation Code')
 
 ################
 # A) Load in raw data
@@ -24,8 +21,6 @@ setwd('study2/3. Simulation Code')
 # Load G table
 Gmatrix <- read.table(DROPBOX_GMATRIX_LINK)
 
-
-# Load HMM estimated parameters - Omega, to learn states from clicks
 
 # Load HMM estimated parameters - geometric emission probs (model-based probabilities to bounce)
 geometric_emission_probs <- read.csv(paste0('../', FILENAME_GEOM_EM_PROBS), header=T)

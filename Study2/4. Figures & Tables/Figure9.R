@@ -6,7 +6,6 @@
 # 
 # Note: 
 #  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
-#  -After that, run '3. Simulation Code/Calculate Average Purchase Rates.R'
 #
 #  Overview:
 #     A) Plot for 15000 visitors
@@ -14,6 +13,8 @@
 #
 #######################################################################################################################
 
+
+SR_data <- read.csv('../1. Raw Data/Real_time_app_success_rate_data.csv')
 
 ############
 # A) Plot for 15000 visitors

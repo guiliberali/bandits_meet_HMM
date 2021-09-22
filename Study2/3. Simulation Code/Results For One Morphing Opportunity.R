@@ -3,18 +3,16 @@
 # Purpose: Gets results for webshop with one Morphing Opportunity 
 # 
 # Note: 
-#  -Run 'Configuration.R' before running this file
-#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
+#  -Make sure to have run 'Configuration.R' & 'Functions.R' before running this file
+#  -Ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code before running this file
 #
 # Overview:
 #     A) Load in raw data 
 #     B) Set parameters
-#     C) Loop over all parameters
+#     C) Loop over all visitors
 #
 #
 #######################################################################################################################
-
-
 
 ################
 # A) Load in raw data

@@ -4,7 +4,7 @@
 # Purpose: Calculates Purchasing Rates 
 # 
 # Note: 
-#  -Run 'Configuration.R' before running this file
+#  -Make sure to have run 'Configuration.R' and 'FUnctions.R' before running this file
 #  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
 #
 # Overview:
@@ -15,10 +15,6 @@
 #
 #######################################################################################################################
 
-getwd()
-setwd('..')
-setwd('Replication_Morphing_HMM/')
-setwd('study2/3. Simulation Code')
 ################
 # A) Load in the Survey and clicks data 
 ################
@@ -154,16 +150,75 @@ stacked_data_purchase_RA = stacked_data %>%
   ungroup() %>% 
   mutate(Treatment=if_else(cell==0,"Random", "HMM_Bandit_Webstore") )
 
-stacked_data_purchase_RA
+stacked_data_purchase_RA %>% filter(Treatment == 'HMM_Bandit_Webstore')
+
 ################
 # C) Compare performance of morph vs random
 ################
 
+getwd()
 
-load(paste0(PATH_RAW, "/Random_single_run.RData") )
 
+load(paste0(PATH_RAW, "Random_single_run.RData") )
+
+
+monitor_Success_Prob=tibble(success_per_visitor=success_per_visitor, 
+                            Treatment="Random")
+
+load(paste0(PATH_RAW, "HMM_Bandit_Store_single_run.RData") )
+TOT_VISITORS<-100000
+
+monitor_Success_Prob=monitor_Success_Prob %>% 
+  bind_rows(tibble(success_per_visitor=success_per_visitor, 
+                   
+                   Treatment="HMM_Bandit_Webstore") )%>% 
+  mutate(Visitor=rep(1:TOT_VISITORS, 2) )
+
+
+monitor_Success_Prob %>% 
+  filter(Visitor %in% 5000:20000) %>% 
+  ggplot(aes(x=Visitor, y=success_per_visitor, color=Treatment))+
+  geom_line()
+
+blended_data=monitor_Success_Prob %>% 
+  left_join(stacked_data_purchase_RA) %>% 
+  mutate(Data_type=if_else(is.na(purchase), "Simulated", "Observed") ) %>% 
+  mutate(Success_dummy=if_else(is.na(purchase), success_per_visitor, purchase)) 
+
+SR_data = blended_data %>%  group_by(Treatment) %>% 
+  mutate(Success_rate=cumsum(Success_dummy)/Visitor) %>% 
+  ungroup() 
+
+read.csv(SR_data, "Real_time_app_success_rate_data.csv")
+
+
+
+SR_plot=SR_data %>% 
+  #filter(Treatment=="Random") %>% 
+  filter(Visitor %in% 100:15000) %>% 
+  ggplot(aes(x=Visitor, y=Success_rate, linetype=Treatment, color=Data_type))+
+  geom_line()+
+  #geom_vline(xintercept = c(275, 1066), size=.4, color="gray60")+
+  scale_linetype_manual(values = c(1, 3), labels=c("HMM Bandit", "Baseline") ) +
+  scale_color_manual(values=c( "black", "gray60") ) +
+  labs(y='Purchase rate (running average)',  linetype= "Treatment", color="Data type")+
+  theme_classic()+theme(legend.position = "bottom") 
+SR_plot
+
+
+
+
+###############
+### PLOTS RANDOM vs. various treatments based on success rates ----
 monitor_Success_Prob=tibble(success_prob=success_prob_runAverage, 
                             Treatment="Random")
+
+load(paste0( PATH_RAW, "HMM_Bandit_Store_single_run.RData") )
+monitor_Success_Prob=monitor_Success_Prob %>% 
+  bind_rows(tibble(success_prob=success_prob_runAverage, 
+                   Treatment="HMM_Bandit_Webstore") )%>% 
+  mutate(Visitor=rep(1:TOT_VISITORS, 5) )
+
 
 TOT_VISITORS = 100000
 monitor_Success_Prob=monitor_Success_Prob %>% 

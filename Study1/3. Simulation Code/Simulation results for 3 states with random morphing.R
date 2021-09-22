@@ -8,11 +8,10 @@
 getwd()
 
 PATH_HMM_EST <- '../2. HMM Estimates'
-PATH_HMM_EST_2S <- '../2. HMM Estimates/Estimates for 3 states'
+PATH_HMM_EST_3S <- '../2. HMM Estimates/Estimates for 3 states'
 
 registerDoParallel(cores=5) ## change depending on server capacity
-  
-  
+
   HMM_BANDIT <- "HMM_BANDIT" ;
   MAB_FIXED_STATE <- "MAB_FIXED_STATE"; 
   RANDOM <- "RANDOM"; ## baseline
@@ -40,14 +39,13 @@ registerDoParallel(cores=5) ## change depending on server capacity
   #source(paste (PATH_CODE,                     "/Application1_Functions_for_Sims.R" , sep="") )   
   Gmatrix   <- read.table( DROPBOX_GMATRIX_LINK) 
   Ckjn      <- read.csv(paste (PATH_HMM_EST, file="/c_ij10.csv", sep="") , header=T) # import true ckjn: 10 pages for now
-  source('Application1_Functions_for_Sims.R')
-    
-  mu_vec       <- read.csv(paste (PATH_HMM_EST_2S, file= "/mu_2Sterminal.csv",   sep=""),    header=T)
-  rho_vec      <- read.csv(paste (PATH_HMM_EST_2S, file= "/rho_2Sterminal.csv",  sep=""),    header=T)
-  pbounce_vec  <- read.csv( paste (PATH_HMM_EST_2S,file= "/pmf_bounce_user_2Sterminal.csv", sep="") , header=T)
-  OOMEGA       <- read.csv(paste (PATH_HMM_EST_2S, file= "/omega_2Sterminal.csv", sep=""),    header=T)
-  NEW_OMEGA       <- read.csv(paste (PATH_HMM_EST_2S, file= "/ArrivalState_omega_2Sterminal.csv",       sep="") , header=T)
-  psm_exposure <- read.csv(paste (PATH_HMM_EST_2S, file= "/psm_2Sterminal.csv",   sep=""),    header=T)
+
+  mu_vec       <- read.csv(paste (PATH_HMM_EST_3S, file= "/mu_3Sterminal.csv",   sep=""),    header=T)
+  rho_vec      <- read.csv(paste (PATH_HMM_EST_3S, file= "/rho_3Sterminal.csv",  sep=""),    header=T)
+  pbounce_vec  <- read.csv( paste (PATH_HMM_EST_3S,file= "/pmf_bounce_user_3Sterminal.csv", sep="") , header=T)
+  OOMEGA       <- read.csv(paste (PATH_HMM_EST_3S, file= "/omega_3Sterminal.csv", sep=""),    header=T)
+  NEW_OMEGA       <- read.csv(paste (PATH_HMM_EST_3S, file= "/ArrivalState_omega_3Sterminal.csv",       sep="") , header=T)
+  psm_exposure <- read.csv(paste (PATH_HMM_EST_3S, file= "/psm_3Sterminal.csv",   sep=""),    header=T)
  
   
   # Parameters 

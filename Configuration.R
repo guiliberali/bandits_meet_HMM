@@ -97,7 +97,8 @@ pacman::p_load(tidyverse,
                doParallel,
                rstan,
                loo,
-               devtools) 
+               devtools,
+               ggpubr) 
 
 # special case: install from source
 # if already installed: just load with library()

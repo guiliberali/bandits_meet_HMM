@@ -1,5 +1,3 @@
-
-
 #######################################################################################################################
 # Author: 
 # Purpose: Generates Figure 8 from page 38 of the paper
@@ -19,7 +17,6 @@
 
 ########
 # A) Monitor Gittens Index for morph 1 vs morph 2 - POST
-########
 
 colnames(monitor_G_m1_s_POST)<- colnames(monitor_G_m2_s_POST)<-c("State 1", "State 2")
 monitor_G=as_tibble(monitor_G_m1_s_POST) %>% 

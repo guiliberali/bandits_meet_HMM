@@ -1,10 +1,18 @@
+#######################################################################################################################
+# Author: 
+# Purpose: Replication file for Figure 3, page 36 of the paper 
+# 
+# Note: the results for this table are created with the following steps:
+#       1) run all the files in 'study1/simulation codes' folder
+#       2) run this file
+#
+# Overview:
+#     Loads in the results from the various simulation files, and determines the average number of applications (with confidence interval)
+#
+#
+#######################################################################################################################
 
-## 4. Summary statistics ----
-## for Table 4
-# load("App1_sim_hmmBandit_2ST.RData")
 
-
-delta_replicates_hmm_bandit
 delta_replicates_hmm_bandit_2S_random = rowSums(sim_1k_reps_2S_random[,1:(2*TOT_MORPHS)])
 delta_replicates_hmm_bandit_2S_fixed = rowSums(sim_1k_reps_2S_fixed[,1:(2*TOT_MORPHS)])
 delta_replicates_hmm_bandit_2S_bandit = rowSums(sim_1k_reps_2S_bandit[,1:(2*TOT_MORPHS)])
@@ -18,25 +26,19 @@ calc_mean_CI_applications <- function(delta_replicates){
   mean_applications <- mean(delta_replicates)
   CI_applications <- t.test(delta_replicates)$conf.int
   
-  C_applications_formatted <- paste0(round(CI_applications[1], 4), '-', round(CI_applications[2], 4))
+  C_applications_formatted <- paste0(round(CI_applications[1], 1), '-', round(CI_applications[2], 1))
+  
+  return(c(mean_applications,C_applications_formatted))
 
 }
 
-avg_applications_2S_random <- mean(delta_replicates_hmm_bandit_2S_random)
-CI_applications_2S_random <- t.test(delta_replicates_hmm_bandit_2S_random)$conf.int
+n_apps_result_2S_random <- calc_mean_CI_applications(delta_replicates_hmm_bandit_2S_random)
+n_apps_result_2S_fixed <- calc_mean_CI_applications(delta_replicates_hmm_bandit_2S_fixed)
+n_apps_result_2S_bandit <- calc_mean_CI_applications(delta_replicates_hmm_bandit_2S_bandit)
+n_apps_result_3S_random <- calc_mean_CI_applications(delta_replicates_hmm_bandit_3S_random)
+n_apps_result_3S_fixed <- calc_mean_CI_applications(delta_replicates_hmm_bandit_3S_fixed)
+n_apps_result_3S_bandit <- calc_mean_CI_applications(delta_replicates_hmm_bandit_3S_bandit)
 
-avg_applications_2S_fixed <- mean(delta_replicates_hmm_bandit_2S_fixed)
-CI_applications_2S_fixed <- t.test(delta_replicates_hmm_bandit_2S_fixed)$conf.int
 
-
-
-c(mean(delta_replicates_hmm_bandit), 
-  t.test(delta_replicates_hmm_bandit)$conf.int)
-
-## for Table 5
-delta_sm_average = colMeans(sim_1k_reps[,1:(TOT_STATES*TOT_MORPHS)])
-
-# load("App1_sim_MabFixedState_2ST.RData")
-delta_replicates_mab_fixed_state=rowSums(sim_1k_reps[,1:(TOT_STATES*TOT_MORPHS)])
-c(mean(delta_replicates_mab_fixed_state), 
-  t.test(delta_replicates_mab_fixed_state)$conf.int)
+table4 <- data.frame(n_applications_2S = c(n_apps_result_2S_random, n_apps_result_2S_fixed, n_apps_result_2S_bandit),
+                     n_applications_3S = c(n_apps_result_3S_random, n_apps_result_3S_fixed, n_apps_result_3S_bandit))

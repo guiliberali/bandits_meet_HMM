@@ -1,19 +1,27 @@
 #######################################################################################################################
 # Author: 
-# Purpose: Gets simulation results for webshop with two Morphing Opportunities
+# Purpose: Gets simulation results for webshop with random morphing
 # 
 # Note: 
-#  -Run 'Configuration.R' before running this file
-#  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
+#  - Make sure to have run 'Configuration.R' and 'Functions.R' before running this file
+#  - After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
 #
-
+# Overview:
+#     A) Set parameters and load data
+#     B) Gather HMM estimates
+#     C) Loop over all visitors
+#
 #
 #
 #######################################################################################################################
 
-registerDoParallel(cores=10)
 
-server=T
+##########
+# A) Set common parameters and load data
+##########
+
+
+registerDoParallel(cores=10)
 
 # Context:  "PHONE STORE" or "HULB2009"
 EMPIRICAL_SETTING     <- "PHONE STORE"  
@@ -97,6 +105,10 @@ geometric_emission_probs <- read.csv(paste( FILENAME_GEOM_EM_PROBS, sep = ''), h
 # Load bounce probability based on raw number of clicks
 temp_pbounce_vec  <- read.csv(paste( FILENAME_BOUNCE_PROBS, sep = '') , header=T)
 
+##########
+# B) Gather HMM estimates
+##########
+
 
 # Load HMM estimated parameters ?
 if (TOT_STATES > 1 ) {mu_vec <-read.csv(FILENAME_MU, header=T) }
@@ -166,6 +178,10 @@ if (TOT_STATES > 1)
 
 # Loads the psm - true purchase per click
 if (BENCHMARK == "test2") {   }  
+
+##########
+# C) Loop over all visitors
+##########
 
 
 set.seed(9000)

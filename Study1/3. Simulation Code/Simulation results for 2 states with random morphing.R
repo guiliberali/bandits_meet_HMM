@@ -76,7 +76,7 @@ registerDoParallel(cores=5) ## change depending on server capacity
   for (m in 1:TOT_MORPHS) {for (s in 1: TOT_STATES) { for (k in 1:K_FULL) { if(!round(sum(p[s+1, , m][p[1,,m]==k]),10) ==1) ERROR } } }  
 
  set.seed(9000)  
- trials=100
+ trials=10
 
   # 3. Simulation: Loop over replicates and visitors -----
   ptime <- system.time({
@@ -273,3 +273,8 @@ registerDoParallel(cores=5) ## change depending on server capacity
   } # close 1k reps loop
   
 })[3]
+ 
+TOT_STATES <-2
+ colMeans(sim_1k_reps_2S_random[,1:(TOT_STATES*TOT_MORPHS)])
+
+          

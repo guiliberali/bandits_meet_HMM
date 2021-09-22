@@ -2,9 +2,10 @@
 # Author: 
 # Purpose: Replication file for Figure 7, page 36 of the paper 
 # 
-# In order to replicate figure 7, run from processed data the file 'Calculating Purchase Rates.R'
 #
-# Note: Ensure the working directory is Replication_Morphing_HMM/Study2/Figures & Tables
+# Note: 
+#  - If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
+#  - Ensure the working directory is Replication_Morphing_HMM/Study2/Figures & Tables
 #
 # Overview:
 #     A) Load in the data for each state
@@ -19,7 +20,7 @@
 # A) Load in the data for each state
 ################
 
-RAW_DATA="../Raw Data"
+RAW_DATA="../1. Raw Data"
 
 #* State membership probs plots ----
 ###### membership change over clicks

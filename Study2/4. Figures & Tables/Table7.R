@@ -9,13 +9,19 @@
 #     - Simulation Results for One Morphing Opportunity.R
 #     - Simulation Results for Two Morphing Opportunities.R
 #     - Simulation Results for Random Morphing.R
+# - After that, set working directory to Study2/4. Figures & Tables
+# - Then, run this file to generate table 7
 #
 # 
-#
 #######################################################################################################################
 
 
-perfect_info_benchmark=0.5068
+## perfect information benchmark
+load('../1. Raw Data/HMM_Bandit_Store_single_run.RData')
+last_click_dummy=ifelse(last_click > 6, 1, 0)
+pr_two_morph_exposure=sum(last_click_dummy)/TOT_VISITORS
+perfect_info_benchmark=(1-pr_two_morph_exposure)*P_mt_pre[2] + pr_two_morph_exposure*P_mt_post[3] 
+
 
 
 # Average Purchase Rate and Confidence Interval - Random Morphing (Baseline)
