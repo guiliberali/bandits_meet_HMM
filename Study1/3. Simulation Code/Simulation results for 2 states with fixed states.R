@@ -95,7 +95,7 @@ registerDoParallel(cores=5) ## change depending on server capacity
   
   
  set.seed(9000)  
- trials=3
+ trials=1000
 
   # 3. Simulation: Loop over replicates and visitors -----
   ptime <- system.time({
