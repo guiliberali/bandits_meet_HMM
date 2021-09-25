@@ -15,7 +15,6 @@
 #
 #######################################################################################################################
 
-
 ##########
 # A) Set common parameters and load data
 ##########
@@ -185,7 +184,7 @@ if (BENCHMARK == "test2") {   }
 
 
 set.seed(9000)
-trials=1000
+trials=10
 
 # Loop over replicates -----
 ptime <- system.time({
@@ -398,5 +397,5 @@ ptime <- system.time({
 })[3]
 
 
-sim_1krep_random_morph[,1]
+sim_1krep_random_morph[1,]
 

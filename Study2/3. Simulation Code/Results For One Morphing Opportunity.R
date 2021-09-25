@@ -158,7 +158,7 @@ G_current_sm_PRE  <- G_current_sm_POST   <- matrix(0,  nrow=TOT_STATES, ncol=TOT
 G_asym_m1_PRE     <- G_asym_m1_POST     <- G_asym_m2_PRE <- G_asym_m2_POST    <-  matrix(0, nrow=TOT_VISITORS, ncol=TOT_STATES)  # current value of the  index
 monitor_G_m1_s_PRE<- monitor_G_m2_s_PRE <- monitor_G_m1_s_POST<- monitor_G_m2_s_POST <- matrix(0, nrow=TOT_VISITORS, ncol=TOT_STATES)
 
-
+set.seed(9000)
 # V.  Loop over all visitors: initializations, then Nature draws state, we update state estimates, get best morph from DP w/G matrix ####
 for (visitor  in 1:TOT_VISITORS)
     {

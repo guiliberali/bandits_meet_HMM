@@ -76,9 +76,6 @@ FILENAME_GEOM_EM_PROBS  <- paste(PATH_HMM_EST, "/", HMM_MODEL,file= "/geometric_
 # set the memory limit
 memory.limit(size=50000)
 
-# load functions
-source('Functions.R') 
-
 # Load libraries 
 # Packes required for subsequent functions. P_load ensures these will be installed and loaded. 
 if (!require("pacman")) install.packages("pacman")

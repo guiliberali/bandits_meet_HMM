@@ -13,7 +13,7 @@
 #
 #######################################################################################################################
 
-
+# read in the SR data to create this plot
 SR_data <- read.csv('../1. Raw Data/Real_time_app_success_rate_data.csv')
 
 ############
@@ -22,7 +22,7 @@ SR_data <- read.csv('../1. Raw Data/Real_time_app_success_rate_data.csv')
 
 SR_plot_15000=SR_data %>% 
   filter(Visitor %in% 100:15000) %>% 
-  ggplot(aes(x=Visitor, y=Success_rate, linetype=Treatment, color=Data_type))+
+  ggplot(aes(x=Visitor, y=Success_rate, color=Treatment))+
   geom_line()+
   geom_vline(xintercept = c(575), size=.4, color="red", linetype="longdash")+
   geom_vline(xintercept = c(2204), size=.4, color="red")+

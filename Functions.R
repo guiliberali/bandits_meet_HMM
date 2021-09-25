@@ -501,4 +501,196 @@ Bayesian_Thm_updater_element<-function(lambda_, P_st, morph, p_delta )
 
 # state_updater=State_bayesian_updater(click, Q0, qs_HMM, best_morph_next_t, psm_true)
 # rowSums(state_updater)
+################
+# Functions to extract alpha + beta values, calculate gittins index
+################
 
+###########################
+#text_alpha_beta_to_number
+# 
+# Input: 
+#   text_alpha_beta; character, text that contains alpha and beta values
+#
+# Output:
+#   vector of alpha and beta values (size 8)
+############################
+
+text_alpha_beta_to_number <- function(text_alpha_beta){
+  
+  # grab text with alpha values, split it, and then grab numeric values
+  alpha_text <- str_match(text_alpha_beta, "Alpha\\s*(.*?)\\s*]]")[2]
+  alpha_split <- str_split(alpha_text,';', simplify = TRUE)
+  alpha_m_numbers <- as.numeric(gsub("\\[|\\]", "", alpha_split))
+  
+  
+  # grab text with beta values, split it, and then grab numeric values
+  beta_text <- str_match(text_alpha_beta, "Beta\\s*(.*?)\\s*]]")[2]
+  beta_split <- str_split(beta_text,';', simplify = TRUE)
+  beta_m_numbers <- as.numeric(gsub("\\[|\\]", "", beta_split))
+  
+  
+  return(c(alpha_m_numbers, beta_m_numbers))
+  
+}
+
+##############################
+#create_df_with_alpha_beta
+#
+#  input: 
+#     df_cleanData: dataframe, contains aux2 variable
+#
+#  output: 
+#    returns the dataframe with alpha and beta values added
+#############################
+
+create_df_with_alpha_beta <- function(df_cleanData){
+  
+  # get number of observations, create vectors of this size
+  n_obs =  length(df_cleanData$aux2)
+  
+  # one vector for each value
+  v_alpha_s1_m1 <- rep(NA,n_obs)
+  v_alpha_s2_m1 <- rep(NA,n_obs)
+  v_alpha_s1_m2 <- rep(NA,n_obs)
+  v_alpha_s2_m2 <- rep(NA,n_obs)
+  v_beta_s1_m1 <- rep(NA,n_obs)
+  v_beta_s2_m1 <- rep(NA,n_obs)
+  v_beta_s1_m2 <- rep(NA,n_obs)
+  v_beta_s2_m2 <- rep(NA,n_obs)
+  
+  # loop through all values
+  for(i in seq(1, n_obs)){
+    
+    # get the text
+    text = df_cleanData$aux2[i]
+    
+    # get alpha and beta values
+    alpha_beta_numbers <- text_alpha_beta_to_number(text)
+    
+    # add values to vectors
+    v_alpha_s1_m1[i] <- alpha_beta_numbers[1]
+    v_alpha_s2_m1[i] <- alpha_beta_numbers[2]
+    v_alpha_s1_m2[i] <- alpha_beta_numbers[3]
+    v_alpha_s2_m2[i] <- alpha_beta_numbers[4]
+    v_beta_s1_m1[i] <- alpha_beta_numbers[5]
+    v_beta_s2_m1[i] <- alpha_beta_numbers[6]
+    v_beta_s1_m2[i] <- alpha_beta_numbers[7]
+    v_beta_s2_m2[i] <- alpha_beta_numbers[8]
+    
+    
+  }
+  
+  # add vectors to dataframe and return
+  df_cleanData$alpha_s1_m1 <- v_alpha_s1_m1
+  df_cleanData$alpha_s2_m1 <- v_alpha_s2_m1
+  df_cleanData$alpha_s1_m2 <- v_alpha_s1_m2
+  df_cleanData$alpha_s2_m2 <- v_alpha_s2_m2
+  df_cleanData$beta_s1_m1 <- v_beta_s1_m1
+  df_cleanData$beta_s2_m1 <- v_beta_s2_m1
+  df_cleanData$beta_s1_m2 <- v_beta_s1_m2
+  df_cleanData$beta_s2_m2 <- v_beta_s2_m2
+  
+  return(df_cleanData)
+}
+
+
+
+##############################
+#G_interpolation_fast
+#
+#  input: 
+#     alpha; float, alpha value
+#     beta; float, beta value
+#     Gmatrix; matrix object, with gittins index values 
+#
+#  output: 
+#    returns the Gittins index score
+#############################
+G_interpolation_fast<-function(alpha,beta, Gmatrix){
+  
+  # trunc and round the alpha and beta
+  trunc_alpha = trunc(alpha)
+  round_alpha = round(alpha)
+  trunc_beta = trunc(beta)
+  round_beta = round(beta)
+  
+  # ensure there is a minimum index of 1,1
+  if(trunc_alpha == 0){
+    trunc_alpha <- 1
+  }
+  if(round_alpha == 0){
+    round_alpha <- 1
+  }
+  if(trunc_beta == 0){
+    trunc_beta <- 1
+  }
+  
+  # take mean of round/truncated indeces 
+  return(mean(Gmatrix[round_beta, round_alpha], 
+              Gmatrix[round_beta,trunc_alpha],   
+              Gmatrix[trunc_beta, round_alpha],
+              Gmatrix[trunc_beta, trunc_alpha]))
+  
+}
+##############################
+#calc_G_indeces
+#
+#  input: 
+#     df_cleanData_alpha_beta: dataframe, contains alpha and beta columns
+#
+#  output: 
+#    returns the dataframe with gittins index value added
+#############################
+
+calc_G_indeces <- function(df_cleanData_alpha_beta){
+  
+  # save gittins index scores in vectors here
+  n_rows <- nrow(df_cleanData_alpha_beta)
+  vec_Gittins_s1_m1 <- rep(NA, n_rows)
+  vec_Gittins_s2_m1 <- rep(NA, n_rows)
+  vec_Gittins_s1_m2 <- rep(NA, n_rows)
+  vec_Gittins_s2_m2 <- rep(NA, n_rows)
+  
+  
+  # start for loop
+  for(i in seq(1, n_rows)){
+    
+    # get alpha and beta for s1, m1 
+    alpha_s1_m1 = df_cleanData_alpha_beta$alpha_s1_m1
+    beta_s1_m1 = df_cleanData_alpha_beta$beta_s1_m1
+    
+    # get alpha and beta for s2, m1
+    alpha_s2_m1 = df_cleanData_alpha_beta$alpha_s2_m1
+    beta_s2_m1 = df_cleanData_alpha_beta$beta_s2_m1
+    
+    # get alpha and beta for s1, m2
+    alpha_s1_m2 = df_cleanData_alpha_beta$alpha_s1_m2
+    beta_s1_m2 = df_cleanData_alpha_beta$beta_s1_m2
+    
+    # get alpha and beta for s2, m2 
+    alpha_s2_m2 = df_cleanData_alpha_beta$alpha_s2_m2
+    beta_s2_m2 = df_cleanData_alpha_beta$beta_s2_m2
+    
+    # calculate the gittins per morph and state
+    Gittins_s1_m1 <- G_interpolation_fast(alpha_s1_m1[i], beta_s1_m1[i], m_Gmatrix)
+    Gittins_s2_m1 <- G_interpolation_fast(alpha_s2_m1[i], beta_s2_m1[i], m_Gmatrix)
+    Gittins_s1_m2 <- G_interpolation_fast(alpha_s1_m2[i], beta_s1_m2[i], m_Gmatrix)
+    Gittins_s2_m2 <- G_interpolation_fast(alpha_s2_m2[i], beta_s2_m2[i], m_Gmatrix)
+    
+    # add gittins to vector
+    vec_Gittins_s1_m1[i] <- Gittins_s1_m1
+    vec_Gittins_s2_m1[i] <- Gittins_s2_m1
+    vec_Gittins_s1_m2[i] <- Gittins_s1_m2
+    vec_Gittins_s2_m2[i] <- Gittins_s2_m2
+    
+  }
+  
+  
+  # add to datafarme and return
+  df_cleanData_alpha_beta$Gittins_s1_m1 <- vec_Gittins_s1_m1
+  df_cleanData_alpha_beta$Gittins_s2_m1 <- vec_Gittins_s2_m1
+  df_cleanData_alpha_beta$Gittins_s1_m2 <- vec_Gittins_s1_m2
+  df_cleanData_alpha_beta$Gittins_s2_m2 <- vec_Gittins_s2_m2
+  
+  return(df_cleanData_alpha_beta)
+}
