@@ -1,13 +1,25 @@
-# Replication code for "Morphing for Consumer Dynamics: Bandits Meet HMM"
-# Author: Gui Liberali and Alina Ferecatu 
-# Date: October 2021
-# Simulation code for Application 1 - MBA study
+#######################################################################################################################
+# Author: 
+# Purpose: Gets simulation results for application page with 2 states and fixed states
+# 
+# Note: 
+#  - Make sure to have run 'Configuration.R' and 'Functions.R' before running this file
+#  - After that, ensure the working directory is Replication_Morphing_HMM/Study1/3. Simulation Code
+#
+# Overview:
+#     A) Set parameters and load data
+#     B) Loop over all visitors
+#
+#
+#
+#######################################################################################################################
+
+
+################
+# A) Set parameters and load data
+################
 
 ## Load required packages ----
-
-getwd()
-
-
 
 PATH_HMM_EST <- '../2. HMM Estimates'
 PATH_HMM_EST_2S <- '../2. HMM Estimates/Estimates for 2 states'
@@ -39,7 +51,6 @@ registerDoParallel(cores=5) ## change depending on server capacity
   INIT_STATES     <- TOT_STATES
 
   # Loading dock: data and functions
-  #source(paste (PATH_CODE,                     "/Application1_Functions_for_Sims.R" , sep="") )   
   Gmatrix   <- read.table( DROPBOX_GMATRIX_LINK) 
   Ckjn      <- read.csv(paste (PATH_HMM_EST, file="/c_ij10.csv", sep="") , header=T) # import true ckjn: 10 pages for now
 
@@ -75,8 +86,16 @@ registerDoParallel(cores=5) ## change depending on server capacity
   p      <-  array(,c(TOT_STATES+1, TOT_LINKS, TOT_MORPHS)); p <-  Compute_click_prob(K_FULL)
   for (m in 1:TOT_MORPHS) {for (s in 1: TOT_STATES) { for (k in 1:K_FULL) { if(!round(sum(p[s+1, , m][p[1,,m]==k]),10) ==1) ERROR } } }  
 
+  
+  
+  
+  ################
+  # A) Loop over all visitors
+  ################
+  
+  
  set.seed(9000)  
- trials=10
+ trials=3
 
   # 3. Simulation: Loop over replicates and visitors -----
   ptime <- system.time({
@@ -115,12 +134,12 @@ registerDoParallel(cores=5) ## change depending on server capacity
         ## Under RANDOM the morph does not change
         best_morph               <- which(rmultinom(1,1,matrix(c(1/TOT_MORPHS),ncol=TOT_MORPHS) ) == 1)  
         morph_chosen[visitor,1]  <- best_morph 
-        
+   
         # 3 Load current G (use asymptotic value if alpha or beta are greater than 3000) 
         for (st_ in 1: TOT_STATES) {  for (mor in 1:TOT_MORPHS)  { if(any(alpha[st_,mor] >= 3000, beta[st_,mor] >= 3000)) {
           G_current_sm[st_, mor] <- alpha[st_,mor]/(alpha[st_,mor]+beta[st_,mor])  } else {   
             G_current_sm[st_, mor] <- G_interpolation_fast(alpha[st_,mor],beta[st_,mor])  } } }
-        
+   
         # 3 Loop over all clicks
         BOUNCED <- FALSE # set flag as bot bouncing 
         for (click in 1:K_FULL)     

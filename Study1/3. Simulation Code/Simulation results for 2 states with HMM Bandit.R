@@ -1,13 +1,23 @@
-# Replication code for "Morphing for Consumer Dynamics: Bandits Meet HMM"
-# Author: Gui Liberali and Alina Ferecatu 
-# Date: October 2021
-# Simulation code for Application 1 - MBA study
+#######################################################################################################################
+# Author: 
+# Purpose: Gets simulation results for application page with 2 states and HMM Bandit
+# 
+# Note: 
+#  - Make sure to have run 'Configuration.R' and 'Functions.R' before running this file
+#  - After that, ensure the working directory is Replication_Morphing_HMM/Study1/3. Simulation Code
+#
+# Overview:
+#     A) Set parameters and load data
+#     B) Loop over all visitors
+#
+#
+#
+#######################################################################################################################
 
-## Load required packages ----
 
-getwd()
-
-
+################
+# A) Set parameters and load data
+################
 
 PATH_HMM_EST <- '../2. HMM Estimates'
 PATH_HMM_EST_2S <- '../2. HMM Estimates/Estimates for 2 states'

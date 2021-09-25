@@ -1,32 +1,41 @@
+#######################################################################################################################
+# Author: 
+# Purpose: Replication file for table 5, page 29
+# 
+#
+# Note: 
+#  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
+# - run the following files in 'study1/3. Simulation Code'
+#     - Simulation results for 2 states with fixed states
+#     - Simulation results for 2 states with HMM Bandit
+# - After that, set working directory to Study2/4. Figures & Tables
+# - Then, run this file to generate table 7
+#
+# Overview
+#  A) load the results for each version
+#  B) Create table 5
+# 
+#######################################################################################################################
 
-## for Table 5
+##########
+# A) load the results for each version
+##########
+
 delta_sm_average_fixed = colMeans(sim_1k_reps_2S_fixed[,1:(2*TOT_MORPHS)])
 delta_sm_average_bandit = colMeans(sim_1k_reps_2S_bandit[,1:(2*TOT_MORPHS)])
 
-delta_sm_average
+##########
+# B) Create table 5
+##########
+
+
 df_sm_average_fixed <- data.frame(t(matrix(delta_sm_average_fixed, ncol=2)))
-colnames(df_sm_average_fixed) <- c('early_state','late_state')
-df_sm_average_fixed$total <- rowSums(df_sm_average_fixed)
+colnames(df_sm_average_fixed) <- c('early_state_fixed_states','late_state_fixed_states')
+df_sm_average_fixed$total_fixed_states <- rowSums(df_sm_average_fixed)
 
 df_sm_average_bandit <- data.frame(t(matrix(delta_sm_average_bandit, ncol=2)))
-colnames(df_sm_average_bandit) <- c('early_state','late_state')
-df_sm_average_bandit$total <- rowSums(df_sm_average_bandit)
+colnames(df_sm_average_bandit) <- c('early_state_HMM_Bandit','late_state_HMM_Banit')
+df_sm_average_bandit$total_HMM_Bandit <- rowSums(df_sm_average_bandit)
 
-
-############
-# 
-# # load("App1_sim_Random_2ST.RData")
-# delta_replicates_baseline=rowSums(sim_1k_reps[,1:(TOT_STATES*TOT_MORPHS)])
-# c(mean(delta_replicates_baseline), 
-#   t.test(delta_replicates_baseline)$conf.int)
-# 
-# ## efficiency measures
-# (mean(delta_replicates_mab_fixed_state)-mean(delta_replicates_baseline))/mean(delta_replicates_baseline)
-# percentage_difference_mab_fixed_state=(delta_replicates_mab_fixed_state-delta_replicates_baseline)/delta_replicates_baseline
-# c(mean(percentage_difference_mab_fixed_state), 
-#   t.test(percentage_difference_mab_fixed_state)$conf.int)
-# 
-# (mean(delta_replicates_hmm_bandit)-mean(delta_replicates_baseline))/mean(delta_replicates_baseline)
-# percentage_difference_hmmBandit=(delta_replicates_hmm_bandit-delta_replicates_baseline)/delta_replicates_baseline
-# c(mean(percentage_difference_hmmBandit), 
-#   t.test(percentage_difference_hmmBandit)$conf.int)
+table5 <- cbind(df_sm_average_fixed, df_sm_average_bandit)
+improvement <- (sum(table5$total_fixed_states) - sum(table5$total_HMM_Bandit))/sum(table5$total_HMM_Bandit)

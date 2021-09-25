@@ -32,11 +32,6 @@ MORPHING_OPPORTUNITY  <- 7
 TRANSITION_COVARIATES <- TRUE
 ## the probability of clicking on "add-to-comparison" at click 7
 COVARIATE_PROBABILITY <- .229 
-# Arrival rates
-QS_ARRIVAL        <- if(TOT_STATES==2) {c(0.55, 0.45)} else {c(0.34, 0.33, 0.33) } # c{1/3,1/3,1/3) }  or {c(6/11, 6/22, 6/33)}  
-QS_ARRIVAL_NATURE <- if(TOT_STATES==2) {c(0.98, 0.02)} else {c(.98,.015, 0.005)}     # Alina suggestion: the HMM estimation is throwing everyone at state 1 at t0. Gui will think more about it as it can have huge pushback
-QS_ARRIVAL        <- if(TOT_STATES==2) {c(1, 0)} else {c(1, 0, 0) } # Alina suggestion: everyone starts in state 1 in the RCT
-QS_ARRIVAL_NATURE <- if(TOT_STATES==2) {c(1, 0)} else {c(1, 0, 0)}  
 
 # Global parameters, 
 TOT_VISITORS <- 100000 
@@ -54,8 +49,6 @@ PATH_OUT      <-  paste(PATH,"_results",sep="")
 DROPBOX_GMATRIX_LINK= 'https://dl.dropboxusercontent.com/s/5gv7jquou6y3tlw/Gmatrix.out'
 
 # set the working directory to path
-setwd(PATH)
-
 
 
 # HMM Configuration files  

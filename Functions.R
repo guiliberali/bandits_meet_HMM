@@ -596,7 +596,7 @@ create_df_with_alpha_beta <- function(df_cleanData){
 
 
 ##############################
-#G_interpolation_fast
+#G_interpolation
 #
 #  input: 
 #     alpha; float, alpha value
@@ -605,15 +605,15 @@ create_df_with_alpha_beta <- function(df_cleanData){
 #
 #  output: 
 #    returns the Gittins index score
-#############################
-G_interpolation_fast<-function(alpha,beta, Gmatrix){
-  
+# #############################
+G_interpolation<-function(alpha,beta, Gmatrix){
+
   # trunc and round the alpha and beta
   trunc_alpha = trunc(alpha)
   round_alpha = round(alpha)
   trunc_beta = trunc(beta)
   round_beta = round(beta)
-  
+
   # ensure there is a minimum index of 1,1
   if(trunc_alpha == 0){
     trunc_alpha <- 1
@@ -624,13 +624,13 @@ G_interpolation_fast<-function(alpha,beta, Gmatrix){
   if(trunc_beta == 0){
     trunc_beta <- 1
   }
-  
-  # take mean of round/truncated indeces 
-  return(mean(Gmatrix[round_beta, round_alpha], 
-              Gmatrix[round_beta,trunc_alpha],   
+
+  # take mean of round/truncated indeces
+  return(mean(Gmatrix[round_beta, round_alpha],
+              Gmatrix[round_beta,trunc_alpha],
               Gmatrix[trunc_beta, round_alpha],
               Gmatrix[trunc_beta, trunc_alpha]))
-  
+
 }
 ##############################
 #calc_G_indeces
@@ -672,10 +672,10 @@ calc_G_indeces <- function(df_cleanData_alpha_beta){
     beta_s2_m2 = df_cleanData_alpha_beta$beta_s2_m2
     
     # calculate the gittins per morph and state
-    Gittins_s1_m1 <- G_interpolation_fast(alpha_s1_m1[i], beta_s1_m1[i], m_Gmatrix)
-    Gittins_s2_m1 <- G_interpolation_fast(alpha_s2_m1[i], beta_s2_m1[i], m_Gmatrix)
-    Gittins_s1_m2 <- G_interpolation_fast(alpha_s1_m2[i], beta_s1_m2[i], m_Gmatrix)
-    Gittins_s2_m2 <- G_interpolation_fast(alpha_s2_m2[i], beta_s2_m2[i], m_Gmatrix)
+    Gittins_s1_m1 <- G_interpolation(alpha_s1_m1[i], beta_s1_m1[i], m_Gmatrix)
+    Gittins_s2_m1 <- G_interpolation(alpha_s2_m1[i], beta_s2_m1[i], m_Gmatrix)
+    Gittins_s1_m2 <- G_interpolation(alpha_s1_m2[i], beta_s1_m2[i], m_Gmatrix)
+    Gittins_s2_m2 <- G_interpolation(alpha_s2_m2[i], beta_s2_m2[i], m_Gmatrix)
     
     # add gittins to vector
     vec_Gittins_s1_m1[i] <- Gittins_s1_m1
