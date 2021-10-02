@@ -12,7 +12,8 @@
 #
 #######################################################################################################################
 
-
+getwd()
+setwd('C:/Users/flori/OneDrive/Documents/Github/Replication_Morphing_HMM/study2/4. Figures & Tables')
 ##################
 # A) Load in Survey Data, the Gmatrix, and calculate the Gittens index
 ##################
