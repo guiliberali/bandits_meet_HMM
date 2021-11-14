@@ -12,8 +12,6 @@
 #
 #######################################################################################################################
 
-getwd()
-setwd('C:/Users/flori/OneDrive/Documents/Github/Replication_Morphing_HMM/study2/4. Figures & Tables')
 ##################
 # A) Load in Survey Data, the Gmatrix, and calculate the Gittens index
 ##################
@@ -21,6 +19,8 @@ RAW_DATA = '../1. Raw Data'
 
 ### CLICKS DATA ----
 processed_clicks_filtered <- read_csv(paste0( RAW_DATA, "/Application2_Production_study_unstacked_data.csv"))
+
+length(unique(processed_clicks_filtered$user_id))
 
 ## add conditions variable
 clicks_data_with_conditions = processed_clicks_filtered %>%

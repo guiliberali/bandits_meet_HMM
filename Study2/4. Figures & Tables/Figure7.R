@@ -15,7 +15,6 @@
 #
 #######################################################################################################################
 
-
 ################
 # A) Load in the data for each state
 ################
@@ -28,6 +27,7 @@ hmm_data_with_states_c14=read_csv(paste0(RAW_DATA,"/hmm_data_with_states_c14.csv
 hmm_data_with_states_c23=read_csv(paste0(RAW_DATA,"/hmm_data_with_states_c23.csv"))
 hmm_data_with_states_cond=hmm_data_with_states_c14 %>%
   bind_rows(hmm_data_with_states_c23)
+
 
 a=hmm_data_with_states_cond %>%
   dplyr::select(Tlength, prob_state1_2ST, prob_state2_2ST, outcome_addTo, condition_reassigned) %>%

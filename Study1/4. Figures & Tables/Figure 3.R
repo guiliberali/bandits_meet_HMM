@@ -12,13 +12,14 @@
 #
 #######################################################################################################################
 
-
 ###################
 # A) Load in the data, calculate the total and mean number of visits.
 ###################
 
+
+
 ## Import dataset / run summary stats ##########
-Data_final=read.csv(paste0('input data',"/AB_data_05_June_2018.csv"), header = T)
+Data_final=read.csv("../1. Raw Data/AB_data_05_June_2018.csv", header = T)
 ## Total number of clicks
 nrow(Data_final)
 ## Total number of visitors
