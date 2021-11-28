@@ -1,3 +1,22 @@
+#######################################################################################################################
+# Author: 
+# Purpose: using stan, computes the posterior distribution
+# 
+# Note: 
+#  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
+#  - After that, set working directory to Study1/2. HMM estimates
+#
+#  Overview:
+#     A) define Stan code
+#     B) Load data
+#     C) estimate the posterior using Stan 
+#
+#######################################################################################################################
+
+
+######################
+# A) define Stan code
+######################
 
 set.seed(9000)
 
@@ -237,7 +256,9 @@ log_lik[t]=delta_tk[t, zstar_t[t]];
 
 m = stan_model(model_code = hmm_terminal)
 
-## Import data ----
+######################
+# B) Load data
+######################
 
 PATH_INPUT = 'input_hmm_estimates'
 Data_final=read.csv(paste0(PATH_INPUT,"/AB_data_05_June_2018.csv"), header = T)
@@ -273,9 +294,10 @@ hmm_data_morph1 %<>% filter(user %in% user_sample_m1$U_m1 )
 user_sample_m2=read_csv(paste0(PATH_INPUT, "/user_sample_m2.csv"))
 hmm_data_morph2 %<>% filter(user %in% user_sample_m2$U_m2) 
 
-############### RUN THE HMM ################################################
-## run the HMM for the abstract morph (morph 1)
 
+######################
+# C) estimate the posterior using Stan 
+######################
 
 hmm_estimation <- function(hmm_data_morph){
   
@@ -357,5 +379,5 @@ hmm2S_M1_terminal <-hmm_estimation(hmm_data_morph1)
 hmm2S_M2_terminal <-hmm_estimation(hmm_data_morph2)
 
 ## save stan object for posterior inferences
-save(hmm2S_M1_terminal, file="hmm2S_M1_terminal.RData")
-save(hmm2S_M2_terminal, file="hmm2S_M2_terminal.RData")
+save(hmm2S_M1_terminal, file="input_hmm_estimates/hmm2S_M1_terminal.RData")
+save(hmm2S_M2_terminal, file="input_hmm_estimates/hmm2S_M2_terminal.RData")

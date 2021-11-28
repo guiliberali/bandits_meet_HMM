@@ -19,13 +19,15 @@ So for instance, for Table 7 of study 2, this file would be in study2/4. Figures
 
 **Step 2.** In case it is necessary, run the files from '3. Simulation files' required for the respective figure or table.
 
-So for Table 7 of study 2, we would have to change our working directory to '3. Simulation code' and then run: 
+To give an example: for Table 7 of study 2, we would have to change our working directory to '3. Simulation code' and then run: 
 
 * Simulation Results for One Morphing Opportunity.R
 * Simulation Results for Two Morphing Opportunities.R
 * Simulation Results for Random Morphing.R
 
 After these files have been run, there will be several variables/objects/parameters defined in the environment. These can be used to create the respective table. 
+
+**Note** the HMM estimates for study 1 can only be replicated with a working stan and C++ distribution on your computer. 
 
 **Step 3.** Run the files from '4. Figures & Tables' for the respective figure or table, using the generated objects. Do not forget to change the working directory back to '4. Figures & Tables'. 
 

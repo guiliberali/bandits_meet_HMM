@@ -271,7 +271,8 @@ Compute_click_prob_conditionalLogit<-function(K_FULL)
   ## computes the probability per link_id
   temp <- array(,c(TOT_STATES,TOT_LINKS, TOT_MORPHS))
   for (m in 1:TOT_MORPHS)  {for(s in 1:TOT_STATES) {for (j in 1:TOT_LINKS) 
-  { temp[s, j, m] = exp(Ckjn[j,2:ncol(Ckjn)] %*% omega %*% all_s[s,]) / den[Ckjn[j,1], s] }}  }
+  {
+    temp[s, j, m] = exp(Ckjn[j,2:ncol(Ckjn)] %*% omega %*% all_s[s,]) / den[Ckjn[j,1], s] }}  }
   
   ## appends the page_id, to be used in the Y_vec
   temp1 <- array(,c((TOT_STATES+1),TOT_LINKS, TOT_MORPHS))
