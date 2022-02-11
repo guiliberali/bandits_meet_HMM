@@ -1,5 +1,5 @@
 
-This repository contains code used in the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu from the Rotterdam School of Management at Erasmus University. 
+This repository contains code used in the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu, from the Rotterdam School of Management at Erasmus University. 
 
 This repository is made public to promote the use of bandits in marketing. If you are interested in the detailed documentation and code to replicate the tables and files in the paper please refer to https://pubsonline.informs.org/doi/suppl/10.1287/mksc.2021.1346.
 
