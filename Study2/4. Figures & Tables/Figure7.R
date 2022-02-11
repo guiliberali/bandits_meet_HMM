@@ -1,6 +1,6 @@
 #######################################################################################################################
 # Author: 
-# Purpose: Replication file for Figure 7, page 36 of the paper 
+# Purpose: Figure 7, page 36 of the paper 
 # 
 #
 # Note: 
