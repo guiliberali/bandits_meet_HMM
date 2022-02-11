@@ -2,12 +2,11 @@
 
 This repository contains code used in the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu from the Rotterdam School of Management at Erasmus University. This repository is made public to promote the use of bandits in marketing; if you are interested in the documentation and code to replicate the tables and files in the paper please refer to https://pubsonline.informs.org/doi/suppl/10.1287/mksc.2021.1346 .
 
-This repository is structured as follows:
+You should first run 'Configuration.R' and 'Functions.R'. 
 - 'Configuration.R' defines global variables necessary for other files, and loads + installs the necessary packages.
 - 'Functions.R' contains all helper functions needed for subsequent analysis performed in the repository. 
 
-Anyone aiming touse this code should first run 'Configuration.R' and 'Functions.R'. 
-In the paper, two studies are performed - each has a separate folder, which is structured as follows. 
+Two studies were performed - each has a separate folder, which is structured as follows. 
 
 <p>
     <img src="Repository Overview.PNG" width="800" height="600" />
