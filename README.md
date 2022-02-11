@@ -1,7 +1,7 @@
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-If you are interested specifically in the detailed documentation and code needed to reproduce the tables and figures in the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu (2022), please refer to the replication files in this link: https://pubsonline.informs.org/doi/suppl/10.1287/mksc.2021.1346.
+If you are interested specifically in the detailed documentation and code needed to reproduce the tables and figures in the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu (2022), please refer to the replication files in this link: https://pubsonline.informs.org/doi/suppl/10.1287/mksc.2021.1346. The code and data uploaded to the journal website can only be used to replicate the findingds of the published article per regulations of the publisher. The code and data found in this GitHub repository, on the other hand, can be freely used and adapted by you in your own projects or future research.
 
 --------------------------------------------------------------------------------------------------------------------------------
 
