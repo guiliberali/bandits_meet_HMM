@@ -1,13 +1,14 @@
 
-This repository contains code used in the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu, from the Rotterdam School of Management at Erasmus University. 
-
-This repository is made public to promote the use of multi-armed bandits (MABs) in marketing and is constantly evolving.
-
 --------------------------------------------------------------------------------------------------------------------------------
 
 Note: If you are interested specifically in the detailed documentation and code needed to replicate the tables and files in the above cited paper, please refer to https://pubsonline.informs.org/doi/suppl/10.1287/mksc.2021.1346.
 
 --------------------------------------------------------------------------------------------------------------------------------
+
+
+This repository is made public to promote the use of multi-armed bandits (MABs) in marketing and is constantly evolving.
+
+It contains code used in the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu, from the Rotterdam School of Management at Erasmus University. 
 
 Before using the code in this repository, you should first run 'Configuration.R' and 'Functions.R'. 
 - 'Configuration.R' defines global variables necessary for other files, and loads + installs the necessary packages.
