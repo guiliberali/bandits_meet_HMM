@@ -1,18 +1,18 @@
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-If you are interested specifically in the detailed documentation and code needed to replicate the tables and files in the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu, please refer to https://pubsonline.informs.org/doi/suppl/10.1287/mksc.2021.1346.
+If you are interested specifically in the detailed documentation and code needed to replicate the tables and files in the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu (2022), please refer to the replication files in this link: https://pubsonline.informs.org/doi/suppl/10.1287/mksc.2021.1346.
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-This repository is made public to promote the use of multi-armed bandits (MABs) in marketing and is constantly evolving. 
+This GitHub repository is made public to promote the use of multi-armed bandits (MABs) in marketing and is constantly evolving. 
 It contains code used in the above-cited paper and more. 
 
 Before using the code in this repository, you should first run 'Configuration.R' and 'Functions.R'. 
 - 'Configuration.R' defines global variables necessary for other files, and loads + installs the necessary packages.
 - 'Functions.R' contains all helper functions needed for subsequent analysis performed in the repository. 
 
-Two studies were performed - each has a separate folder, structured as follows. 
+The data from the two studies in Liberali and Ferecatu, 2022 are made available here. Each has a separate folder, structured as follows. 
 
 <p>
     <img src="Repository Overview.PNG" width="800" height="600" />
