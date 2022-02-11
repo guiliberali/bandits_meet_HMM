@@ -140,14 +140,6 @@ estimate_future_period_qs<-function(tr_matrix, qs)
 }
 #click=1
 ############### Within-person  DP #################
-# version control
-#  - Gui added the m- and s- specific bouncing probability instead of the discount rate
-#  - Note that Alina suggested separating number of clicks from number of periods locally in this function only.
-#    Gui rejected that change because (1) in this paper we are not doing this separation (2) if and when we decide to do this,
-#    we will have to do this globally, not in a single function. Even if our initial intuition is that this is the only place 
-#    that this matters, this needs to be thought trhoughly instead of "ad-hoc"-ally :) otherwise we simply can create new 
-#    errors for no reason
-
 # with seven periods ahead ----
 DP = function(K, qs_future, qs, G_current_sm_POST, G_current_sm_PRE, p_bounce) # , delta_dp)   
 {
@@ -388,48 +380,14 @@ Bayesian_updater<-function(K, M, navigation_prior, omega, Ckjn,all_s, Y_mat )
   return(num_jointclicks/den_jointclicks)
 }
 ############### Bayesian updating - Montoya et al 2010 ###############
-##  Value:  prob of state s' at t+1 given state s at t, organized in a K*K matrix, where on the rows you have the current state, and on the columns you have the previous states.  
-##  Intermediate steps:
-##    numerator: probability of ending up in state s' given all possible starting points s
-##    denominator: sum over all probabilities of being in a state s', starting from state s and summed acrross all previous states s
-# Tr_matrix is [TOT_STATES, TOT_STATES, TOT_MORPHS]
-# qs_ is [K_FULL+1, TOT_STATES]
-# psm_ is [TOT_MORPHS, TOT_STATES]
-## Next 5 lines are for testing purposes - comment out in production
-# k=click
-# tr_matrix=Q0
-# state_probs=qs_HMM
-# success_prob_per_state = psm_true
-# morph=best_morph_next_t
-# CODED BY: ALINA 
-#Bayesian_Thm_updater<-function(click, lambda_, qs_, morph, psm_ )
-#{
-#  numerator   <-  matrix(, TOT_STATES, TOT_STATES)
-#  for (current_s in 1:TOT_STATES) {numerator[current_s,] <- lambda_[ , current_s, morph]*qs_[click, ] * psm_[morph, current_s]  }
-#  denominator <- rowSums(numerator)
-#  return(numerator/denominator)
-#}  
+
+
 
 ############### Bayesian_Thm_updater_element ###############  
 Bayesian_Thm_updater_element_cond<-function(lambda_, P_st, morph, geometric_emission_probs)
 {
   p_deltas<- as.data.frame(geometric_emission_probs[geometric_emission_probs$Tr_cov_model==TRANSITION_COVARIATES,])
-  
-  # Notes
-  #  1. Now psm depends on the previous morph seen. This is given empirically in the RCT.
-  #  2. All that matters is the first morph seen when selecting the morph at t=7 hence 
-  #     temporarily we do p_delta[1,] and p_delta[2,] for now
-  #p_delta <- matrix(0,nr=TOT_MORPHS, nc=TOT_STATES)
-  #if (first_morph ==1) 
-  #  {
-  #   p_delta[1,] <- p_deltas$p_purchase_cond1[click=7] # cond 1 is m1m1
-  #   p_delta[2,] <- p_deltas$p_purchase_cond2[click=7] # cond 2 is m1m2
-  #   }
-  #if (first_morph ==2) 
-  #  {
-  #   p_delta[1,] <- p_deltas$p_purchase_cond3[click=7] # cond 1 is m1m1
-  #   p_delta[2,] <- p_deltas$p_purchase_cond4[click=7] # cond 2 is m1m2
-  #   }
+
   p_delta=matrix((1-p_deltas$prob), nrow=TOT_MORPHS, ncol=TOT_STATES, byrow = T)
   
   numerator   <-  matrix(, TOT_STATES) 
@@ -466,11 +424,7 @@ Bayesian_Thm_updater_element_cond<-function(lambda_, P_st, morph, geometric_emis
 ############### Bayesian_Thm_updater_element ###############  
 Bayesian_Thm_updater_element<-function(lambda_, P_st, morph, p_delta )
 {
-  ## for testing
-  # lambda_=lambda
-  # P_st=qs_HMM[click,]
-  # morph=best_morph
-  
+
   numerator   <-  matrix(, TOT_STATES) 
   if (TOT_STATES ==2) 
   {
@@ -500,8 +454,6 @@ Bayesian_Thm_updater_element<-function(lambda_, P_st, morph, p_delta )
   return( numerator/sum(numerator)  )
 }  
 
-# state_updater=State_bayesian_updater(click, Q0, qs_HMM, best_morph_next_t, psm_true)
-# rowSums(state_updater)
 ################
 # Functions to extract alpha + beta values, calculate gittins index
 ################
