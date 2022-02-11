@@ -7,7 +7,7 @@ If you are interested specifically in the detailed documentation and code needed
 
 This GitHub repository is made public to promote the use of multi-armed bandits (MABs) in marketing and is constantly evolving. 
 It contains code used in Liberali and Ferecatu (2022), and more. 
-The code and data uploaded to the journal website (see link above) can only be used to replicate the findings of the published article per regulations of the publisher. 
+The code and data uploaded to the journal website (see link above) can be used solely to reproduce the findings of the published article per regulations of the publisher. 
 The code and data found in this GitHub repository, on the other hand, can be freely used and adapted by you in your own projects or future research.  
 
 Before using the code in this repository, you should first run 'Configuration.R' and 'Functions.R'. 
