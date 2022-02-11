@@ -14,6 +14,7 @@ Two studies were performed - each has a separate folder, structured as follows.
 </p>
 
 Main steps:
+
 Step 1. Find the table or figure you are interested in the '4. Figures & Tables' map.
 For instance, for Table 7 of study 2, this file would be in study2/4. Figures & Tables/Table7.R. 
 
