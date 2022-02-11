@@ -7,7 +7,7 @@ Before using the code in this repository, you should first run 'Configuration.R'
 - 'Configuration.R' defines global variables necessary for other files, and loads + installs the necessary packages.
 - 'Functions.R' contains all helper functions needed for subsequent analysis performed in the repository. 
 
-Two studies were performed - each has a separate folder, which is structured as follows. 
+Two studies were performed - each has a separate folder, structured as follows. 
 
 <p>
     <img src="Repository Overview.PNG" width="800" height="600" />
