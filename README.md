@@ -1,6 +1,6 @@
 # Replication_Morphing_HMM
 
-This repository contains the replication code for the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu from the Rotterdam School of Management at Erasmus University. 
+This repository contains code used in the paper 'Morphing for Consumers Dynamics: Bandits meet HMM' by Gui Liberali and Alina Ferecatu from the Rotterdam School of Management at Erasmus University. This code is for further development.
 
 The repository is structured as follows:
 - 'Configuration.R' defines global variables necessary for other files, and loads + installs the necessary packages.
