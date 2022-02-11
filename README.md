@@ -24,7 +24,7 @@ For example: for Table 7 of study 2, we would have to change our working directo
 
 After these files have been run, there will be several variables/objects/parameters defined in the environment. These can be used to create the respective table. 
 
-Note that the HMM estimates for study 1 can only be replicated with a working stan and C++ distribution on your computer. 
+Note that for the HMM estimates for study 1 you need a working Stan distribution and a C++ distribution on your computer. 
 
 Step 3. Run the files from '4. Figures & Tables' for the respective figure or table, using the generated objects. Do not forget to change the working directory back to '4. Figures & Tables'. 
 
