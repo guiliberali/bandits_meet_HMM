@@ -2,7 +2,7 @@
 # Author: 
 # Purpose: Generates table 6 from page 40
 # 
-# Note: 
+# Note:  
 #  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
 #  -After that, set working directory to Study2/4. Figures & Tables
 # - Then, run this file to generate table 6
