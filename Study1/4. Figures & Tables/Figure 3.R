@@ -68,7 +68,7 @@ bounce_userlevel=Data_final %>%
 BR=data.frame(click=sort(unique(bounce_userlevel$total.count)), 
               freq=c(with(bounce_userlevel, table(total.count)))) %>% 
   mutate(bounce_rate=freq/sum(freq)) %>% mutate(prob_stay=1-cumsum(bounce_rate))
-
+ 
 ###################
 # C) Create the plot
 ###################
