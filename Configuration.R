@@ -36,7 +36,7 @@ COVARIATE_PROBABILITY <- .229
 # Global parameters, 
 TOT_VISITORS <- 100000 
 TOT_MORPHS   <- 2  
-K_FULL       <- 14  #  4 in MBA/first two rounds: 4  periods so we allow to change morphs every 4 sets of clicks. Alina suggests (a) using 15 (clicks, RCT median=15, mean=20). (b) decouple clicks from periods. This should be thought thorough
+K_FULL       <- 14  #  4 in MBA/first two rounds: 4  periods so we allow to change morphs every 4 sets of clicks.
 TOT_PERIODS=K_FULL
 TOT_CONSIDERED_PERIODS<-4
 
