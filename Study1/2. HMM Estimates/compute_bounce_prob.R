@@ -8,7 +8,7 @@
 #  - After that, set working directory to Study1/2. HMM estimates
 #  - Before running this file, run 'stan_computing_posterior.R' in the same directory
 #
-#  Overview:
+#  Overview: 
 #     A) loads data, and augment data to prepare for estimation 
 #     B) estimate bounce probabilities 
 #     C) Calculate the PSM
