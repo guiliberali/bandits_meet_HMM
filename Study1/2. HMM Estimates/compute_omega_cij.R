@@ -1,7 +1,7 @@
 #######################################################################################################################
 # Author: 
 # Purpose:computes the omega & and cij values, used for subsequent simulation
-# 
+#  
 # Note: 
 #  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
 #  - After that, set working directory to Study1/2. HMM estimates
