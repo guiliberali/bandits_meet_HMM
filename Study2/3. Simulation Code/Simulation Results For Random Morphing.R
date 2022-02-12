@@ -3,7 +3,7 @@
 # Purpose: Gets simulation results for webshop with random morphing
 # 
 # Note: 
-#  - Make sure to have run 'Configuration.R' and 'Functions.R' before running this file
+#  - Make sure to have run 'Configuration.R' and 'Functions.R' before running this file 
 #  - After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
 #
 # Overview:
