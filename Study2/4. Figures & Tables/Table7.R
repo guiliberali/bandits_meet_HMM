@@ -2,7 +2,7 @@
 #######################################################################################################################
 # Author: 
 # Purpose: Generates table 7 from page 42
-# 
+#  
 # Note: 
 #  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
 #  -After that, run each of the following files from '3. Simulation Code':
