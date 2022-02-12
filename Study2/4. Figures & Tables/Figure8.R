@@ -3,7 +3,7 @@
 # Purpose: Generates Figure 8 from page 38 of the paper
 # 
 # Note: 
-#  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
+#  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so 
 #
 #  Overview:
 #     A) Load in Survey Data, the Gmatrix, and calculate the Gittens index
