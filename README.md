@@ -17,7 +17,7 @@ Before using the code in this repository, you should first run 'Configuration.R'
 The data from the two studies reported in Liberali and Ferecatu (2022) are made available here. Each has a separate folder, structured as follows. 
 
 <p>
-    <img src="Repository Overview.PNG" width="800" height="600" />
+    <img src="Repository Overview2.PNG" width="800" height="600" />
 </p>
 
 Main steps:
