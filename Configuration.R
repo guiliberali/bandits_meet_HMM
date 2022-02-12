@@ -1,7 +1,7 @@
 # Configuration file
 # Run this file before running code from Study1 or Study2 folders
 
-# clean up R environment
+# clean up R environment 
 rm(list=ls()) 
 set.seed(9000)
 
