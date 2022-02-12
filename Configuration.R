@@ -98,4 +98,4 @@ pacman::p_load(tidyverse,
 # special case: install from source
 # if already installed: just load with library()
 install.packages("RcppParallel", type = "source")
-library(RcppParallel)
+library(RcppParallel) 
