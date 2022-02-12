@@ -1,6 +1,6 @@
 #######################################################################################################################
 # Author: 
-# Purpose: Gets simulation results for webshop with one Morphing Opportunities
+# Purpose: Gets simulation results for webshop with one morphing opportunity
 # 
 # Note: 
 #  - Make sure to have run 'Configuration.R' and 'Functions.R' before running this file
