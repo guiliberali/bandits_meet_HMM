@@ -3,7 +3,7 @@
 # Date: October 2021
 # Analysis for Application 2 - Calibration study
 # Functions necessary for the HMM estimation and the Gittins plots in Application 2
-
+ 
 ## Hmm terminal model for Application 2, calibration data ----
 hmm_terminal_geometric_ind_cov = "
 data {
