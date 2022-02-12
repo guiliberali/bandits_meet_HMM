@@ -1,6 +1,6 @@
 #######################################################################################################################
 # Author: 
-# Purpose: Replication file for Figure 3, page 36 of the paper 
+# Purpose: Generate Figure 3, page 36  
 # 
 # Note: Ensure the working directory is Replication_Morphing_HMM/Study1/Figures & Tables
 #
