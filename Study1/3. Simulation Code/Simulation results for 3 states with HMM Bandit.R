@@ -8,7 +8,7 @@
 #
 # Overview:
 #     A) Set parameters and load data
-#     B) Loop over all visitors
+#     B) Loop over all visitors 
 #
 #
 #
