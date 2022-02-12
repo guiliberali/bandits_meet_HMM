@@ -6,7 +6,7 @@
 
 ############### Basic functions: logsumexp, softmax, inv_logit ##############  
 logsumexp <- function(x) {
-  y = max(x)
+  y = max(x) 
   y + log(sum(exp(x - y)))
 }
 softmax <- function(x) {
