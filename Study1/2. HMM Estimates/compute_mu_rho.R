@@ -3,7 +3,7 @@
 # Purpose:computes the mu & rho values, used for subsequent simulation
 #          More specifically, puts out 'mu_2Sterminal.csv' and 'rho_2Sterminal.csv'
 
-# 
+#  
 # Note: 
 #  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
 #  - After that, set working directory to Study1/2. HMM estimates
