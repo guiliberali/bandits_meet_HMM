@@ -7,7 +7,7 @@
 #  - After that, ensure the working directory is Replication_Morphing_HMM/Study2/3. Simulation Code
 #
 # Overview:
-#     A) Set parameters and load data
+#     A) Set parameters and load data 
 #     B) Gather HMM estimates
 #     C) Loop over all visitors
 #
