@@ -4,7 +4,7 @@
 # 
 #
 # Note: 
-#  - If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
+#  - If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so 
 #  - Ensure the working directory is Replication_Morphing_HMM/Study2/Figures & Tables
 #
 # Overview:
