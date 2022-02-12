@@ -6,7 +6,7 @@
 # Note: 
 #  -Run 'Configuration.R' before running this file
 #  -After that, ensure the working directory is Replication_Morphing_HMM/Study2/2. HMM Estimates
-#
+# 
 # Overview:
 #     A) Read in dataset, initial transformations, set parameters
 #     B) Make HMM estimates with Stan
