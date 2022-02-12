@@ -5,7 +5,7 @@
 # Purpose: Generates Figure 9 from page 40 of the paper
 # 
 # Note: 
-#  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so
+#  -If you have not ran 'Configuration.R' and 'Functions.R' before running this file, make sure to do so 
 #
 #  Overview:
 #     A) Plot for 15000 visitors
