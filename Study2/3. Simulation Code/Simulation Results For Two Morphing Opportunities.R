@@ -1,5 +1,5 @@
 #######################################################################################################################
-# Author: 
+#  
 # Purpose: Gets simulation results for webshop with two morphing opportunities
 # Note: 
 #  - Make sure to have run 'Configuration.R' and 'Functions.R' before running this file
