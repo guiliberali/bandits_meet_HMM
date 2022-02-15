@@ -1,5 +1,5 @@
 #######################################################################################################################
-# Author: 
+#  
 # Purpose: Gets simulation results for application page with 2 states and random morphing
 # 
 # Note: 
