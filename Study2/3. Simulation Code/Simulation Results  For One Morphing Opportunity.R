@@ -1,5 +1,5 @@
 #######################################################################################################################
-# Author: 
+#  
 # Purpose: Gets simulation results for webshop with one morphing opportunity
 # 
 # Note: 
