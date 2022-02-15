@@ -1,5 +1,5 @@
 #######################################################################################################################
-# Author: 
+#  
 # Purpose: Gets simulation results for application page with 3 states and random morphin
 # 
 # Note: 
