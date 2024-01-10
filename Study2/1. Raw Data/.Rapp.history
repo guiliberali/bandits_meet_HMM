@@ -1,0 +1,25 @@
+load("/Users/gui/SURFDrive/Project HMM_MAB/900. sims/_code/bandits_meet_HMM/Study2/1. Raw Data/HMM_Bandit_Store_single_run.RData")
+last_click_dummy=ifelse(last_click > 6, 1, 0)#
+pr_two_morph_exposure=sum(last_click_dummy)/TOT_VISITORS#
+perfect_info_benchmark=(1-pr_two_morph_exposure)*P_mt_pre[2] + pr_two_morph_exposure*P_mt_post[3]
+pr_two_morph_exposure
+?t.test
+require(graphics)#
+#
+t.test(1:10, y = c(7:20))      # P = .00001855#
+t.test(1:10, y = c(7:20, 200)) # P = .1245    -- NOT significant anymore#
+#
+## Classical example: Student's sleep data#
+plot(extra ~ group, data = sleep)#
+## Traditional interface#
+with(sleep, t.test(extra[group == 1], extra[group == 2]))
+## Formula interface#
+t.test(extra ~ group, data = sleep)
+## Formula interface to one-sample test#
+t.test(extra ~ 1, data = sleep)
+## Formula interface to one-sample test#
+t.test(extra ~ 1, data = sleep)$conf.int
+t.test(1:10)
+t.test(1:10)$conf.int
+t.test(1:10,mu=1)$conf.int
+t.test(1:10,mu=1)
